@@ -60,6 +60,13 @@ public class ClientHandler implements Runnable {
         }
     }
 
+    public void changeNickName(String msg) throws IOException {
+        if (msg.contains("/n")) {
+            setNickName(msg.substring(3));
+            broadCastMessage("\n" + "Nickname has changed to " + nickName + "\n");
+        }
+    }
+
     public void sendSrvMessage(String msg) throws IOException {
         out.writeUTF(msg);
         out.flush();
@@ -92,12 +99,10 @@ public class ClientHandler implements Runnable {
                         break;
                     }
 
-                    if (clientMessage.contains("/n ")) {
-                        setNickName(clientMessage.substring(3));
-
-                        System.out.println("\n" + "Nickname has changed to " + nickName);
-                        broadCastMessage("Nickname has changed to " + nickName);
+                    if (clientMessage.contains("/n")){
+                        changeNickName(clientMessage);
                     }
+
 
                     if (clientMessage.contains("/w ")) {
                         String nickName = name(clientMessage);
@@ -106,8 +111,19 @@ public class ClientHandler implements Runnable {
                     System.out.println(getNickName() + ": " + clientMessage);
                     broadCastMessage(getNickName() + ": " + clientMessage);
                 }
+                if (socket.isClosed()) {
+                    System.out.println("Client has been disconnected");
+                }
             } catch (IOException e) {
                 e.printStackTrace();
+                try {
+                    in.close();
+                    out.close();
+                    socket.close();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+
             }
         }
     }
