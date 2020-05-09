@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="460.0"
+            prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
+   <TextField fx:id="inputText" layoutX="259.0" layoutY="419.0" onKeyReleased="#sendEnter" prefHeight="35.0" prefWidth="280.0"/>
+   <TextArea fx:id="chatMsg" layoutX="177.0" layoutY="3.0" prefHeight="414.0" prefWidth="421.0" editable="false"/>
+   <TextField fx:id="nickName" layoutX="178.0" layoutY="419.0" prefHeight="35.0" prefWidth="79.0"/>
+
+   <Pane layoutX="4.0" layoutY="3.0" prefHeight="451.0" prefWidth="171.0">
+      <ListView fx:id="listView" prefHeight="451.0" prefWidth="171.0"/>
+   </Pane>
+   <Button layoutX="541.0" layoutY="419.0" onAction="#send" mnemonicParsing="false" prefHeight="35.0" prefWidth="57.0" text="Send"/>
+</AnchorPane>
