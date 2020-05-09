@@ -34,7 +34,7 @@ public class Controller implements Initializable {
             new Thread(() -> {
                 while (true) {
                     try {
-                        chatMsg.appendText(in.readUTF());
+                        chatMsg.appendText(in.readUTF() + "\n");
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -53,7 +53,7 @@ public class Controller implements Initializable {
         new Thread(() -> {
             try {
                 if (inputText != null) {
-                    out.writeUTF(msg + "\n");
+                    out.writeUTF(msg);
                     out.flush();
                 }
             } catch (IOException e) {
