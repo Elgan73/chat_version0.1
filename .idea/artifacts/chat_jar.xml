@@ -1,0 +1,23 @@
+<component name="ArtifactManager">
+  <artifact name="chat:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/chat_jar</output-path>
+    <root id="root">
+      <element id="archive" name="chat.jar">
+        <element id="directory" name="META-INF">
+          <element id="file-copy" path="$PROJECT_DIR$/client-chat/src/main/java/META-INF/MANIFEST.MF" />
+        </element>
+        <element id="module-output" name="chat" />
+        <element id="module-output" name="server-chat" />
+        <element id="module-output" name="client-chat" />
+      </element>
+      <element id="library" level="project" name="Maven: org.openjfx:javafx-fxml:mac:12.0.2" />
+      <element id="library" level="project" name="Maven: org.openjfx:javafx-controls:mac:13" />
+      <element id="library" level="project" name="Maven: org.openjfx:javafx-base:13" />
+      <element id="library" level="project" name="Maven: org.openjfx:javafx-base:mac:13" />
+      <element id="library" level="project" name="Maven: org.openjfx:javafx-graphics:13" />
+      <element id="library" level="project" name="Maven: org.openjfx:javafx-controls:13" />
+      <element id="library" level="project" name="Maven: org.openjfx:javafx-graphics:mac:13" />
+      <element id="library" level="project" name="Maven: org.openjfx:javafx-fxml:12.0.2" />
+    </root>
+  </artifact>
+</component>
