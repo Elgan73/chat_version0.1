@@ -1,8 +1,8 @@
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.EOFException;
 import java.io.IOException;
 import java.net.Socket;
-import java.util.Scanner;
 
 public class ClientHandler implements Runnable {
 
@@ -36,9 +36,7 @@ public class ClientHandler implements Runnable {
 
     public void broadCastMessage(String message) throws IOException {
         for (ClientHandler client : Server.getClients()) {
-//            if (!client.equals(this)) {
-                client.sendMessage(message);
-//            }
+            client.sendMessage(message);
         }
     }
 
@@ -47,83 +45,74 @@ public class ClientHandler implements Runnable {
         out.flush();
     }
 
-    public String name(String msg) {
-        int b = msg.lastIndexOf("/");
-        return msg.substring(3, b);
-    }
-
-    public void sendPrivateMsg(String name, String msg) throws IOException {
+    public void sendPrivateMsg(String name, String msg) {
         for (ClientHandler cl : Server.getClients()) {
-            if (cl.getNickName().equals(name)) {
-                cl.broadCastMessage(msg);
+            if (name.equals(cl.getNickName())) {
+                String mess = cl.getNickName() + " -> " + msg;
+                try {
+                    cl.sendMessage(mess + "\n");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
 
     public void changeNickName(String msg) throws IOException {
-        if (msg.contains("/n")) {
-            setNickName(msg.substring(3));
-            broadCastMessage("\n" + "Nickname has changed to " + nickName + "\n");
-        }
+        String nick = getNickName();
+        setNickName(msg.substring(3));
+        broadCastMessage("\n" + nick + " has changed nickname to " + nickName + "\n");
     }
 
-    public void sendSrvMessage(String msg) throws IOException {
-        out.writeUTF(msg);
-        out.flush();
+    public void exitChat() {
+        Server.getClients().remove(this);
+        this.downService();
+    }
+
+    public void downService() {
+        try{
+            if (!socket.isClosed()) {
+                socket.close();
+                in.close();
+                out.close();
+            }
+        } catch (IOException ignored){}
     }
 
     @Override
     public void run() {
-
-//        new Thread(() -> {
-//            Scanner sc = new Scanner(System.in);
-//            String msgSrv = sc.nextLine();
-//            while (running) {
-//                try {
-//                    sendSrvMessage("Sauron: " + msgSrv + "\n");
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }).start();
-
         while (running) {
             try {
-
+                String clientMessage = in.readUTF();
                 if (socket.isConnected()) {
-                    String clientMessage = in.readUTF();
 
-                    if (clientMessage.equals("_exit_")) {
-                        Server.getClients().remove(this);
-                        sendMessage(clientMessage);
-                        break;
-                    }
-
-                    if (clientMessage.contains("/n")){
+                    if (clientMessage.startsWith("/n")) {
                         changeNickName(clientMessage);
                     }
 
-
-                    if (clientMessage.contains("/w ")) {
-                        String nickName = name(clientMessage);
-                        sendPrivateMsg(nickName, clientMessage);
+                    if (clientMessage.equals("/exit")) {
+                        System.out.println(getNickName() + ": exit from chat");
+                        exitChat();
+                        break;
                     }
+
+                    if (clientMessage.startsWith("@")) {
+                        String msg = clientMessage.substring(1);
+                        String[] user = msg.split(" ", 2);
+                        sendPrivateMsg(user[0], user[1]);
+                    } else {
+                        broadCastMessage(getNickName() + ": " + clientMessage);
+                    }
+
                     System.out.println(getNickName() + ": " + clientMessage);
-                    broadCastMessage(getNickName() + ": " + clientMessage);
                 }
-                if (socket.isClosed()) {
-                    System.out.println("Client has been disconnected");
-                }
+
             } catch (IOException e) {
                 e.printStackTrace();
-                try {
-                    in.close();
-                    out.close();
-                    socket.close();
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
+                break;
 
+            } finally {
+                this.downService();
             }
         }
     }
