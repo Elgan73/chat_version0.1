@@ -8,7 +8,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("ch.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("authorized.fxml"));
         stage.setTitle("Chat ver: 0.1");
         stage.setScene(new Scene(root, 600,460));
         stage.show();

@@ -4,7 +4,7 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.net.Socket;
 
-public class ClientHandler implements Runnable {
+public class ClientHandler extends BaseAuthService implements Runnable{
 
     private Socket socket;
     private DataInputStream in;
@@ -38,6 +38,15 @@ public class ClientHandler implements Runnable {
         for (ClientHandler client : Server.getClients()) {
             client.sendMessage(message);
         }
+    }
+
+    public synchronized void broadCastClientList() throws IOException {
+        StringBuilder sb = new StringBuilder("/clients ");
+        for(ClientHandler client : Server.getClients()) {
+            sb.append(client.getNickName() + " ");
+        }
+        broadCastMessage(sb.toString());
+
     }
 
     public void sendMessage(String message) throws IOException {
@@ -85,9 +94,26 @@ public class ClientHandler implements Runnable {
             try {
                 String clientMessage = in.readUTF();
                 if (socket.isConnected()) {
+                    broadCastClientList();
 
                     if (clientMessage.startsWith("/n")) {
                         changeNickName(clientMessage);
+                    }
+
+                    if(clientMessage.startsWith("/?")) {
+                        String loginMsg = clientMessage.substring(2);
+                        String[] logInPass = loginMsg.split(":", 2);
+                        getNickByLogin(logInPass[0], logInPass[1]);
+                        broadCastMessage("/authOk");
+                        System.out.println(logInPass[0] + " " + logInPass[1]);
+                    }
+
+                    if(clientMessage.startsWith("/!")) {
+                        String authMsg = clientMessage.substring(2);
+                        String[] authUser = authMsg.split(":", 3);
+                        setNickName(authUser[0]);
+
+                        System.out.println(authUser[0] + " " + authUser[1] + " " + authUser[2]);
                     }
 
                     if (clientMessage.equals("/exit")) {
@@ -104,15 +130,13 @@ public class ClientHandler implements Runnable {
                         broadCastMessage(getNickName() + ": " + clientMessage);
                     }
 
-                    System.out.println(getNickName() + ": " + clientMessage);
+//                    System.out.println(getNickName() + ": " + clientMessage);
                 }
 
             } catch (IOException e) {
                 e.printStackTrace();
                 break;
 
-            } finally {
-                this.downService();
             }
         }
     }

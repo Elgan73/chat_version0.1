@@ -1,12 +1,15 @@
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+package controllers;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.stage.Stage;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -19,11 +22,10 @@ public class Controller implements Initializable {
     public TextField inputText;
     public TextField nickName;
     public TextArea chatMsg;
+    public Button exitChat;
     private Socket socket;
     private DataInputStream in;
     private DataOutputStream out;
-
-
 
     public void send(ActionEvent actionEvent) {
         sendMessage();
@@ -31,7 +33,6 @@ public class Controller implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
         try {
             socket = new Socket("localhost", 8189);
             in = new DataInputStream(socket.getInputStream());
@@ -40,6 +41,9 @@ public class Controller implements Initializable {
                 while (true) {
                     try {
                         chatMsg.appendText(in.readUTF() + "\n");
+                        if (in.readUTF().startsWith("/clients")) {
+
+                        }
                     } catch (IOException e) {
                         e.printStackTrace();
                         try {
@@ -55,7 +59,6 @@ public class Controller implements Initializable {
             });
             t1.setDaemon(true);
             t1.start();
-
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -63,36 +66,31 @@ public class Controller implements Initializable {
 
     public void sendMessage() {
         String msg = inputText.getText();
-
         try {
-            if (inputText.getText().equals("") || inputText.getText().equals(" ")) {
-                chatMsg.appendText("Вы не ввели сообщение" + "\n");
-            }
-
-            if (inputText.getText().equals("/exit")) {
-                socket.close();
-                out.close();
-                in.close();
-            }
-            if (!nickName.getText().isEmpty()) {
-                String a = "@" + nickName.getText() + " " + msg;
-                String b = nickName.getText() + " -> " + msg + "\n";
-                out.writeUTF(a + "\n");
-                out.flush();
-            } else {
+            if (!inputText.getText().isEmpty()) {
                 out.writeUTF(msg);
                 out.flush();
+            } else {
+                if (inputText.getText().equals("") || inputText.getText().equals(" ")) {
+                    chatMsg.appendText("Вы не ввели сообщение" + "\n");
+                }
+
+                if (inputText.getText().equals("/exit")) {
+                    socket.close();
+                    out.close();
+                    in.close();
+                }
+
+                if (!nickName.getText().isEmpty()) {
+                    String a = "@" + nickName.getText() + " " + msg;
+                    out.writeUTF(a + "\n");
+                    out.flush();
+                }
             }
             inputText.clear();
             inputText.requestFocus();
         } catch (IOException e) {
             e.printStackTrace();
-            try {
-                out.close();
-                socket.close();
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
         }
 
     }
@@ -103,4 +101,11 @@ public class Controller implements Initializable {
         }
     }
 
+
+    public void exitChat(ActionEvent actionEvent) throws IOException {
+        out.writeUTF("/exit");
+        out.flush();
+        Stage stage = (Stage) exitChat.getScene().getWindow();
+        stage.close();
+    }
 }
