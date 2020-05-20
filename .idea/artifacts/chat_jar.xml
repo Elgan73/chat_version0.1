@@ -10,14 +10,6 @@
         <element id="module-output" name="server-chat" />
         <element id="module-output" name="client-chat" />
       </element>
-      <element id="library" level="project" name="Maven: org.openjfx:javafx-fxml:mac:12.0.2" />
-      <element id="library" level="project" name="Maven: org.openjfx:javafx-controls:mac:13" />
-      <element id="library" level="project" name="Maven: org.openjfx:javafx-base:13" />
-      <element id="library" level="project" name="Maven: org.openjfx:javafx-base:mac:13" />
-      <element id="library" level="project" name="Maven: org.openjfx:javafx-graphics:13" />
-      <element id="library" level="project" name="Maven: org.openjfx:javafx-controls:13" />
-      <element id="library" level="project" name="Maven: org.openjfx:javafx-graphics:mac:13" />
-      <element id="library" level="project" name="Maven: org.openjfx:javafx-fxml:12.0.2" />
     </root>
   </artifact>
 </component>
