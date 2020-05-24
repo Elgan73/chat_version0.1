@@ -6,7 +6,7 @@ public class Server {
     private final static int PORT = 8189;
     private static int cnt = 1;
 
-    private boolean isRunning;
+    private boolean isRunning = true;
     private static ConcurrentLinkedDeque<ClientHandler> clients;
 
     public static ConcurrentLinkedDeque<ClientHandler> getClients() {
@@ -14,18 +14,18 @@ public class Server {
     }
 
     public Server(int port) {
-        isRunning = true;
+
         clients = new ConcurrentLinkedDeque<>();
         try {
             ServerSocket srv = new ServerSocket(PORT);
             System.out.println("Server started!");
             while (isRunning) {
                 Socket socket = srv.accept();
-                ClientHandler client = new ClientHandler(socket, "client #" + cnt);
-                cnt++;
+                ClientHandler client = new ClientHandler(socket, "client" + cnt);
                 clients.add(client);
                 System.out.println(client.getNickName() + " accepted!");
                 new Thread(client).start();
+                cnt++;
             }
         } catch (Exception e) {
             e.printStackTrace();
