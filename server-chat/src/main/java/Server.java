@@ -5,6 +5,7 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 public class Server {
     private final static int PORT = 8189;
     private static int cnt = 1;
+    private BaseAuthService baseAuthService;
 
     private boolean isRunning = true;
     private static ConcurrentLinkedDeque<ClientHandler> clients;
