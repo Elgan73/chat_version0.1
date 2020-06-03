@@ -1,3 +1,4 @@
+import controllers.Controller;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -8,9 +9,10 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("join.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("authorized.fxml"));
         stage.setTitle("Stark Chat ver: 0.1");
         stage.setScene(new Scene(root, 600,460));
+        stage.setOnCloseRequest(Controller.getCloseEventHandler());
         stage.show();
 
     }

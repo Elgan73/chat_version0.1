@@ -17,6 +17,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
+                <version>3.2.0</version>
                 <configuration>
                     <archive>
                         <manifest>
@@ -42,17 +43,13 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
-<!--    <dependencies>-->
-<!--        <dependency>-->
-<!--            <groupId>org.openjfx</groupId>-->
-<!--            <artifactId>javafx-controls</artifactId>-->
-<!--            <version>14</version>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>org.openjfx</groupId>-->
-<!--            <artifactId>javafx-fxml</artifactId>-->
-<!--            <version>14</version>-->
-<!--        </dependency>-->
-<!--    </dependencies>-->
+
+    <dependencies>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.20</version>
+        </dependency>
+    </dependencies>
 
 </project>

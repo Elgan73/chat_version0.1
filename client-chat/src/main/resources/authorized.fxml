@@ -4,36 +4,30 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="460.0" prefWidth="600.0" style="-fx-background-color: #2C2C45;"
-            xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="controllers.AuthController">
-    <Button fx:id="enterChat" layoutX="258.0" layoutY="325.0" mnemonicParsing="false"
-            style="-fx-background-color: #2C2C45; -fx-border-color: #fff; -fx-border-radius: 10;" text="Enter"
-            textFill="WHITE">
+<AnchorPane prefHeight="460.0" prefWidth="600.0" style="-fx-background-color: #2C2C45;" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AuthController">
+    <Button fx:id="enterChat" layoutX="258.0" layoutY="296.0" mnemonicParsing="false" style="-fx-background-color: #2C2C45; -fx-border-color: #fff; -fx-border-radius: 10;" text="Enter" textFill="WHITE">
         <font>
-            <Font name="Avenir Book" size="22.0"/>
+            <Font name="Avenir Book" size="22.0" />
         </font>
     </Button>
     <TextField fx:id="userLogin" layoutX="153.0" layoutY="150.0" prefHeight="27.0" prefWidth="295.0" promptText="Login">
         <font>
-            <Font size="24.0"/>
+            <Font size="24.0" />
         </font>
     </TextField>
     <TextField fx:id="userPassword" layoutX="153.0" layoutY="206.0" prefHeight="27.0" prefWidth="295.0" promptText="Password">
         <font>
-            <Font size="24.0"/>
+            <Font size="24.0" />
         </font>
     </TextField>
     <Label layoutX="224.0" layoutY="62.0" text="Let`s chat" textFill="WHITE">
         <font>
-            <Font name="Avenir Book" size="36.0"/>
+            <Font name="Avenir Book" size="36.0" />
         </font>
     </Label>
-    <Button fx:id="registration" layoutX="14.0" layoutY="402.0" mnemonicParsing="false"
-            style="-fx-background-color: #32314D; -fx-border-color: #fff; -fx-border-radius: 10;" text="Registration"
-            textFill="WHITE">
+    <Button fx:id="registration" layoutX="14.0" layoutY="402.0" mnemonicParsing="false" style="-fx-background-color: #32314D; -fx-border-color: #fff; -fx-border-radius: 10;" text="Registration" textFill="WHITE">
         <font>
-            <Font name="Avenir Book" size="20.0"/>
+            <Font name="Avenir Book" size="20.0" />
         </font>
     </Button>
 </AnchorPane>
