@@ -9,9 +9,9 @@ public class AuthService implements Runnable {
     Socket socket;
     DataOutputStream out;
     DataInputStream in;
-    String urlConnectToDB = "jdbc:mysql://localhost:3306/chat";
-    String loginDB = "root";
-    String passDb = "12345678";
+    static String urlConnectToDB = "jdbc:mysql://localhost:3306/chat";
+    static String loginDB = "root";
+    static String passDb = "12345678";
 
     private static ConcurrentLinkedDeque<ClientHandler> clients;
 
@@ -25,7 +25,7 @@ public class AuthService implements Runnable {
         this.in = in;
     }
 
-    public boolean isUserDataConfirmed(String login, String pass) {
+    public static boolean isUserDataConfirmed(String login, String pass) {
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -58,7 +58,7 @@ public class AuthService implements Runnable {
         }
     }
 
-    public void createUser(String login, String pass) {
+    public static void createUser(String login, String pass) {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {
@@ -77,7 +77,7 @@ public class AuthService implements Runnable {
         }
     }
 
-    public boolean userAlreadyExist(String login) {
+    public static boolean userAlreadyExist(String login) {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {

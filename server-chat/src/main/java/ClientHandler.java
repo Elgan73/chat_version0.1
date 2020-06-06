@@ -12,17 +12,19 @@ public class ClientHandler implements Runnable {
     private DataOutputStream out;
     private String nickName;
     private boolean running;
-    private Database db;
+    private static AuthService authService;
 //    String urlConnectToDB = "jdbc:mysql://localhost:3306/chat";
 //    String loginDB = "root";
 //    String passDb = "12345678";
 
-    public ClientHandler(Socket socket, String nickName) throws IOException {
+    public ClientHandler(Server server, Socket socket) throws IOException {
         this.socket = socket;
         in = new DataInputStream(socket.getInputStream());
         out = new DataOutputStream(socket.getOutputStream());
         running = true;
+
         welcome();
+
     }
 
     public String getNickName() {
@@ -34,7 +36,7 @@ public class ClientHandler implements Runnable {
     }
 
     public void welcome() throws IOException {
-        for (ClientHandler cl : AuthService.getClients()) {
+        for (ClientHandler cl : Server.getClients()) {
             cl.sendMessage("/newClient " + this.nickName);
             this.sendMessage("/newClient " + cl.getNickName());
         }
@@ -43,25 +45,25 @@ public class ClientHandler implements Runnable {
     }
 
     public synchronized void deleteClient() throws Exception {
-        AuthService.getClients().remove(this);
-        for (ClientHandler cl : AuthService.getClients()) {
+        Server.getClients().remove(this);
+        for (ClientHandler cl : Server.getClients()) {
             cl.sendMessage("/deleteClient " + this.nickName);
         }
     }
 
     public synchronized void broadCastMessage(String message) throws IOException {
-        for (ClientHandler client : AuthService.getClients()) {
-                client.sendMessage(message);
+        for (ClientHandler client : Server.getClients()) {
+            client.sendMessage(message);
         }
     }
 
-//    public void regUser(String login, String pass) {
-//        db.addClient(login, pass);
-//    }
-//
-//    public void authUser(String login, String pass) {
-//        db.getClientCredentialByName(login, pass);
-//    }
+    public void regUser(String login, String pass) {
+        AuthService.createUser(login, pass);
+    }
+
+    public void authUser(String login, String pass) {
+        AuthService.isUserDataConfirmed(login, pass);
+    }
 
     public synchronized void sendMessage(String message) throws IOException {
         out.writeUTF(message);
@@ -69,7 +71,7 @@ public class ClientHandler implements Runnable {
     }
 
     public void sendPrivateMsg(String name, String msg) throws IOException {
-        for (ClientHandler cl : AuthService.getClients()) {
+        for (ClientHandler cl : Server.getClients()) {
             if (name.equals(cl.getNickName())) {
                 cl.sendMessage(this.nickName + " -> " + cl.getNickName() + ": " + msg);
                 this.sendMessage(this.nickName + " -> " + cl.getNickName() + ": " + msg);
@@ -84,10 +86,11 @@ public class ClientHandler implements Runnable {
     }
 
     public synchronized void exitChat() throws Exception {
-        AuthService.getClients().remove(this);
+        Server.getClients().remove(this);
         deleteClient();
         this.downService();
     }
+
 
     public synchronized void downService() {
         try {
@@ -107,7 +110,7 @@ public class ClientHandler implements Runnable {
 
                 if (socket.isConnected()) {
                     String clientMessage = in.readUTF();
-                    if(!clientMessage.isEmpty()) {
+                    if (!clientMessage.isEmpty()) {
                         if (clientMessage.equals("/exit")) {
                             System.out.println(getNickName() + ": exit from chat");
                             exitChat();
@@ -122,17 +125,16 @@ public class ClientHandler implements Runnable {
 
                         // /lp - авторизация
                         // /regUser - регистрация
-//                        else if (clientMessage.startsWith("/lp")) {
-//                            String msg = clientMessage.substring(4);
-//                            String[] usr = msg.split(",", 2);
-//                            authUser(usr[0], usr[1]);
-//                        } else if (clientMessage.startsWith("/regUser")) {
-//                            String msg = clientMessage.substring(9);
-//                            String[] usr = msg.split(",", 3);
-//                            regUser(usr[0], usr[1]);
-//                        }
+                        else if (clientMessage.startsWith("/lp")) {
+                            String msg = clientMessage.substring(4);
+                            String[] usr = msg.split(",", 2);
+                            authUser(usr[0], usr[1]);
 
-                        else {
+                        } else if (clientMessage.startsWith("/regUser")) {
+                            String msg = clientMessage.substring(9);
+                            String[] usr = msg.split(",", 3);
+                            regUser(usr[0], usr[1]);
+                        } else {
                             broadCastMessage(getNickName() + ": " + clientMessage);
                         }
                     }

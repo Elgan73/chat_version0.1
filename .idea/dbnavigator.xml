@@ -23,11 +23,7 @@
     <autoscroll-to-editor value="false" />
     <autoscroll-from-editor value="true" />
     <show-object-properties value="true" />
-    <loaded-nodes>
-      <connection connection-id="c94937e9-44d4-424d-9871-6f3e6d4861af">
-        <schema name="chat" object-types="column, dataset trigger, function, index, procedure, view, constraint, table" />
-      </connection>
-    </loaded-nodes>
+    <loaded-nodes />
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
     <connection id="c94937e9-44d4-424d-9871-6f3e6d4861af">

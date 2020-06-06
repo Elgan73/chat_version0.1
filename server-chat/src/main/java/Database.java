@@ -32,6 +32,27 @@ public class Database {
         return false;
     }
 
+    public boolean changeNickName(String name, String newName) {
+        connection = openConnection();
+        String changeNickName = "UPDATE users SET login_usr = '" + newName +"' WHERE login_usr = '" + name +"'";
+        try {
+            try (Statement statement = connection.createStatement()) {
+                if(isClientInDbByName(newName)) {
+                    System.out.println("Client already exist!");
+                    closeConnection(connection);
+                    return false;
+                } else {
+                    statement.execute(changeNickName);
+                    closeConnection(connection);
+                    return true;
+                }
+            }
+        } catch (SQLException sql) {
+            sql.printStackTrace();
+        }
+        return false;
+    }
+
 
     public boolean isClientInDbByName(String name) {
 
@@ -56,8 +77,8 @@ public class Database {
 
     }
 
-    public String[] getClientCredentialByName(String name, String pass) {
-        String query = "SELECT login_usr, pass_usr from USERS where name = '" + name + "','" + pass + "'";
+    public String[] getClientCredentialByName(String name) {
+        String query = "SELECT login_usr, pass_usr from USERS where name = '" + name + "'";
         connection = openConnection();
         try {
             try (
