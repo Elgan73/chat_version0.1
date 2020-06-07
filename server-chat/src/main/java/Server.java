@@ -29,36 +29,11 @@ public class Server {
         System.out.println(allClients);
     }
 
-    public Server(int port) throws ClassNotFoundException {
+    public Server(int port) {
 
         System.out.println("Server is started...");
         dbInit();
         serverInit();
-
-//        try {
-//            ServerSocket srv = new ServerSocket(PORT);
-//            System.out.println("Server started!");
-//            while (true) {
-//                Socket socket = srv.accept();
-//
-//                DataInputStream in = new DataInputStream(socket.getInputStream());
-//                DataOutputStream out = new DataOutputStream(socket.getOutputStream());
-//
-////                AuthService authService = new AuthService(socket, out, in);
-////                new Thread(authService).start();
-////                if(socket.isConnected()) {
-////                    ClientHandler clientHandler = new ClientHandler(socket, nickName);
-////                    clients.add(clientHandler);
-////                    new Thread(clientHandler).start();
-////                }
-//
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//
-//        }
-
-
     }
 
     private void dbInit() {
@@ -67,7 +42,6 @@ public class Server {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-//        Database database = new Database();
     }
 
     private void serverInit() {
@@ -78,7 +52,7 @@ public class Server {
                 System.out.println("Ждем новые подключения...");
                 Socket socket = serverSocket.accept();
                 System.out.println("Новый клиент =)");
-                new ClientHandler(this, socket);
+                new ClientHandle(this, socket);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -87,9 +61,9 @@ public class Server {
     }
 
     public String clientAsString() {
-        StringBuilder strBld = new StringBuilder();
+        StringBuilder strBld = new StringBuilder("/newClient ");
         for (ClientHandle cl : clientsList) {
-            strBld.append(cl.getClientName()).append("|");
+            strBld.append(cl.getClientName()).append(",");
         }
         return strBld.toString();
     }
@@ -98,6 +72,7 @@ public class Server {
         clientsList.add(clientHandle);
         clientMap.put(clientHandle, "");
         broadCastMsg(clientHandle.getClientName() + " присоединился к чату");
+        broadCastClientList();
 
     }
 
@@ -108,7 +83,7 @@ public class Server {
     }
 
     public void broadCastClientList() {
-        StringBuilder sb = new StringBuilder("/newClient ");
+        StringBuilder sb = new StringBuilder("/u ");
         for(ClientHandle cl : clientsList) {
             sb.append(cl.getClientName()).append(" ");
         }
@@ -119,6 +94,14 @@ public class Server {
     public void broadCastMsg(String msg) {
         for(ClientHandle cl : clientsList) {
             cl.sendMsg(cl.getClientName() + " " + msg);
+        }
+    }
+
+    public void broadCastMsgWithoutSender(String msg, ClientHandle client) {
+        ConcurrentLinkedDeque<ClientHandle> tmpList = new ConcurrentLinkedDeque<>(clientsList);
+        tmpList.remove(client);
+        for(ClientHandle cl : tmpList) {
+            cl.sendMsg(msg);
         }
     }
 

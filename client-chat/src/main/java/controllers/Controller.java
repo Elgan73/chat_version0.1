@@ -47,41 +47,34 @@ public class Controller implements Initializable {
         net.connect("localhost", 8189);
         in = net.getInputStream();
         out = net.getOutputStream();
-//            socket = new Socket("localhost", 8189);
-//            in = new DataInputStream(socket.getInputStream());
-//            out = new DataOutputStream(socket.getOutputStream());
+
         Thread t1 = new Thread(() -> {
             while (true) {
                 try {
                     listView.setItems(clients);
                     listView.refresh();
-//                        inputText.requestFocus();
+                        inputText.requestFocus();
                     String message = in.readUTF();
-                    if (message.startsWith("/newClient")) {
-                        Platform.runLater(() -> listView.getItems().add(message.substring(11)));
+
+                    if (message.startsWith("/newClient") || message.startsWith("/u")) {
+                        String[] s = message.split(" ", 2);
+                        Platform.runLater(() -> listView.getItems().addAll(s[1]));
                     }
 
-                    listView.setOnMouseClicked(mouseEvent -> {
-                        if(mouseEvent.getClickCount() == 2) {
-                            String cl = listView.getSelectionModel().getSelectedItems().get(0);
-                            nickName.setText(cl);
-                        }
-                    });
-
+                    doubleClickLVItems();
 
                     if (message.startsWith("/deleteClient")) {
                         Platform.runLater(() -> listView.getItems().remove(message.substring(14)));
                     }
 
                     if (message.equals("/exit")) {
-                        in.close();
-                        out.close();
+                        quitChat();
                         break;
                     }
                     if (!message.isEmpty() && !message.contains("/n") && !message.startsWith("@") && !message.contains("/delete")) {
                         Platform.runLater(() -> chatMsg.getItems().add(message));
                     }
-
+                    System.out.println(message);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -121,17 +114,30 @@ public class Controller implements Initializable {
         }
     }
 
+    public void doubleClickLVItems() {
+        listView.setOnMouseClicked(mouseEvent -> {
+            if(mouseEvent.getClickCount() == 2) {
+                String cl = listView.getSelectionModel().getSelectedItems().get(0);
+                nickName.setText(cl);
+            }
+        });
+    }
+
     public void sendEnter(KeyEvent keyEvent) {
         if (keyEvent.getCode().equals(KeyCode.ENTER)) {
             sendMessage();
         }
     }
 
+    public void quitChat() {
+        Platform.exit();
+    }
 
     public void exitChat(ActionEvent actionEvent) throws IOException {
         out.writeUTF("/exit");
         out.flush();
         Platform.exit();
+        System.exit(0);
     }
 
     public static EventHandler<WindowEvent> getCloseEventHandler() {

@@ -57,12 +57,12 @@ public class Database {
     public boolean isClientInDbByName(String name) {
 
         connection = openConnection(); //2 connection
-        String query = "SELECT name from USERS where name = '" + name + "'";
+        String query = "select login_usr from users where login_usr = '" + name + "'";
         try {
             try (Statement statement = connection.createStatement();
                  ResultSet resultSet = statement.executeQuery(query);) {
                 while (resultSet.next()) {
-                    if (resultSet.getString("name").toLowerCase().equalsIgnoreCase(name)) {
+                    if (resultSet.getString("login_usr").toLowerCase().equalsIgnoreCase(name)) {
                         System.out.println("isClientInDbByName " + true);
                         closeConnection(connection);//close 2nd
                         return true;
@@ -78,16 +78,16 @@ public class Database {
     }
 
     public String[] getClientCredentialByName(String name) {
-        String query = "SELECT login_usr, pass_usr from USERS where name = '" + name + "'";
+        String query = "SELECT login_usr, pass_usr from USERS where login_usr = '" + name + "'";
         connection = openConnection();
         try {
             try (
                     Statement statement = connection.createStatement();
                     ResultSet result = statement.executeQuery(query);) {
                 while (result.next()) {
-                    if (result.getString("name").toLowerCase().equalsIgnoreCase(name)) {
-                        String username = result.getString("name");
-                        String password = result.getString("password");
+                    if (result.getString("login_usr").toLowerCase().equalsIgnoreCase(name)) {
+                        String username = result.getString("login_usr");
+                        String password = result.getString("pass_usr");
                         closeConnection(connection);
                         return new String[]{username, password};
                     }
@@ -107,10 +107,10 @@ public class Database {
 
         try {
             connection = DriverManager.getConnection(
-                    "com.mysql.cj.jdbc.Driver");
+                    "jdbc:mysql://localhost:3306/chat", "root", "12345678");
             if (connection.isClosed()) {
                 connection = DriverManager.getConnection(
-                        "com.mysql.cj.jdbc.Driver");
+                        "jdbc:mysql://localhost:3306/chat", "root", "12345678");
             } else {
                 System.out.println("\t\tConnection open!");
             }

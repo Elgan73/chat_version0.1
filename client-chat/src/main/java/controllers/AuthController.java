@@ -1,6 +1,7 @@
 package controllers;
 
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -26,74 +27,84 @@ public class AuthController implements Initializable {
     private DataInputStream in;
     private DataOutputStream out;
 
+    private void openRegistrationWindow() {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/signUp.fxml"));
+        try {
+            loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Parent root = loader.getRoot();
+        Stage stage = new Stage();
+        stage.setScene(new Scene(root));
+        stage.showAndWait();
+    }
+
+    private void openChatWindow() {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/ch.fxml"));
+        try {
+            loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Parent root = loader.getRoot();
+        Stage stage = new Stage();
+        stage.setScene(new Scene(root));
+        stage.showAndWait();
+    }
+
+    private void sendRequest() {
+        try {
+            out.writeUTF("/lp," + userLogin.getText() + "," + userPassword.getText());
+            out.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        registration.setOnAction(event -> {
-            registration.getScene().getWindow().hide();
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("/signUp.fxml"));
-            try {
-                loader.load();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            Parent root = loader.getRoot();
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.showAndWait();
-        });
 
-        try {
-            net.connect("localhost", 8189);
-            in = net.getInputStream();
-            out = net.getOutputStream();
-            enterChat.setOnAction(actionEvent -> {
-                String login = userLogin.getText();
-                String pass = userPassword.getText();
-                String msg = "/lp," + login + "," + pass;
+        net.connect("localhost", 8189);
+        in = net.getInputStream();
+        out = net.getOutputStream();
+
+        Thread t = new Thread(() -> {
+            String msg;
+            while (true) {
                 try {
-                    out.writeUTF(msg);
-                    out.flush();
-                    if (in.readUTF().equals("/authOk")) {
+                    msg = in.readUTF();
+                    System.out.println(msg);
+                    if (msg.startsWith("/authOk")) {
+                        Platform.runLater(this::openChatWindow);
                         Platform.runLater(() -> {
-                            FXMLLoader loader = new FXMLLoader();
-                            loader.setLocation(getClass().getResource("/ch.fxml"));
-                            try {
-                                loader.load();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                            Parent root = loader.getRoot();
-                            Stage stage = new Stage();
-                            stage.setScene(new Scene(root));
-                            stage.showAndWait();
+                            enterChat.getScene().getWindow().hide();
                         });
-
-                    } else {
-                        System.out.println("smth wrong!");
-//                        FXMLLoader loader = new FXMLLoader();
-//                        loader.setLocation(getClass().getResource("/signUp.fxml"));
-//                        try {
-//                            loader.load();
-//                        } catch (IOException e) {
-//                            e.printStackTrace();
-//                        }
-//                        Parent root = loader.getRoot();
-//                        Stage stage = new Stage();
-//                        stage.setScene(new Scene(root));
-//                        stage.showAndWait();
                     }
-                } catch (IOException e) {
+//                    else {
+//                        System.out.println("smth wrong with authority!");
+//                    }
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
-            });
-        } catch (Exception e) {
+            }
+        });
+        t.setDaemon(true);
+        t.start();
+    }
 
-            e.printStackTrace();
-        }
+    public void clickAuthBtn(ActionEvent actionEvent) {
+        sendRequest();
+    }
 
+    public void intentRegistration(ActionEvent actionEvent) {
+        Platform.runLater(this::openRegistrationWindow);
+        Platform.runLater(() -> {
+            registration.getScene().getWindow().hide();
+        });
     }
 }
 

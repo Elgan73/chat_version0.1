@@ -7,19 +7,22 @@
 <AnchorPane prefHeight="460.0" prefWidth="600.0" style="-fx-background-color: #2C2C45;"
             xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="controllers.SignUpController">
-    <Button fx:id="signUpBtn" layoutX="245.0" layoutY="333.0" mnemonicParsing="false"
+    <Button fx:id="signUpBtn" layoutX="245.0" layoutY="307.0" mnemonicParsing="false"
+            onAction="#clickSignUpBtn"
             style="-fx-background-color: #2C2C45; -fx-border-color: #fff; -fx-border-radius: 10;" text="Sign Up"
             textFill="WHITE">
         <font>
             <Font name="Avenir Book" size="22.0"/>
         </font>
     </Button>
-    <TextField fx:id="userSignUpLogin" layoutX="153.0" layoutY="120.0" prefHeight="27.0" prefWidth="295.0" promptText="Login">
+    <TextField fx:id="userSignUpLogin" layoutX="153.0" layoutY="146.0" prefHeight="27.0" prefWidth="295.0"
+               promptText="Login">
         <font>
             <Font size="24.0"/>
         </font>
     </TextField>
-    <TextField fx:id="userSignUpPass" layoutX="153.0" layoutY="176.0" prefHeight="27.0" prefWidth="295.0" promptText="Password">
+    <TextField fx:id="userSignUpPass" layoutX="153.0" layoutY="202.0" prefHeight="27.0" prefWidth="295.0"
+               promptText="Password">
         <font>
             <Font size="24.0"/>
         </font>
@@ -29,9 +32,4 @@
             <Font name="Avenir Book" size="36.0"/>
         </font>
     </Label>
-    <TextField fx:id="userSignUpNick" layoutX="153.0" layoutY="232.0" prefHeight="27.0" prefWidth="295.0" promptText="Nickname">
-        <font>
-            <Font size="24.0"/>
-        </font>
-    </TextField>
 </AnchorPane>

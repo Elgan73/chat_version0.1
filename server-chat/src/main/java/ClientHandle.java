@@ -47,43 +47,33 @@ public class ClientHandle {
         }
     }
 
+    public void welcome() {
+
+    }
+
     public void authentication() {
         while (!isLoggedIn) {
             String clientMessage = getMsgFromClient();
             if (!clientMessage.isEmpty()) {
 
-//                if (clientMessage.equals("/exit")) {
-//                    System.out.println(getClientName() + ": exit from chat");
-//                    exitChat();
-//                    break;
-//                } else if (clientMessage.startsWith("/n")) {
-//                    changeNickName(clientMessage);
-//                } else if (clientMessage.startsWith("@")) {
-//
-//                    server.sendPrivateMessage(clientMessage, this);
-//                }
-//
-//                if(clientMessage.startsWith("/lp")) {
-//                    if(isLoggedIn) {
-//                        sendMsg("User already authorized");
-//                    }
-//                    auth(clientMessage);
-//                }
+                if(clientMessage.startsWith("/exit")) {
+                    sendMsg("/exit");
+                    exitChat();
+                    return;
+                }
 
-                // /lp - авторизация
-                // /regUser - регистрация
-//                else if (clientMessage.startsWith("/lp")) {
-//                    String msg = clientMessage.substring(4);
-//                    String[] usr = msg.split(",", 2);
-//                    authUser(usr[0], usr[1]);
-//
-//                } else if (clientMessage.startsWith("/regUser")) {
-//                    String msg = clientMessage.substring(9);
-//                    String[] usr = msg.split(",", 3);
-//                    regUser(usr[0], usr[1]);
-//                } else {
-//                    server.broadCastMsg(clientMessage);
-//                }
+                if(clientMessage.startsWith("/lp")) {
+                    if(isLoggedIn) {
+                        sendMsg("User already authorized");
+                        continue;
+                    }
+                    authorization(clientMessage);
+                }
+
+                if (clientMessage.startsWith("/regUser")) {
+                    registration(clientMessage);
+                }
+
             }
         }
     }
@@ -102,8 +92,10 @@ public class ClientHandle {
         } else {
             setClientName(login);
             isLoggedIn = true;
-            sendMsg("/authOk " + login + "successfully authorized");
+            sendMsg("/authOk " + login + " successfully authorized");
+
             server.subscribe(this);
+//            sendMsg("/newClient " + this.clientName);
             return true;
         }
     }
@@ -121,7 +113,10 @@ public class ClientHandle {
         String pass = command[2];
         if(!isTaken(login)) {
             database.addClient(login, pass);
-            sendMsg("/regOk" + login + "User successfully registered");
+            sendMsg("/regOk " + login + " successfully registered");
+            server.subscribe(this);
+//            sendMsg("/newClient " + this.clientName);
+
         } else {
             sendMsg("NickName: " + login + " is busy");
         }
@@ -141,8 +136,6 @@ public class ClientHandle {
                 changeNickName(strFromClient);
             } else if(strFromClient.startsWith("@")) {
                 server.sendPrivateMessage(strFromClient, this);
-            } else if(strFromClient.startsWith("/lp")) {
-
             }
         }
     }
@@ -199,7 +192,17 @@ public class ClientHandle {
         }
     }
 
+    public void parseMsg(String msg) {
+        if(msg.startsWith("/")) {
+            parseCommand(msg);
+        } else {
+            server.broadCastMsgWithoutSender(msg, this);
+        }
+    }
 
+    public void parseCommand(String msg) {
+//        if(msg.startsWith("/"))
+    }
 
 
 }
