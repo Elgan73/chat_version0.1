@@ -12,9 +12,8 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
+import javafx.stage.WindowEvent;
+import net.Network;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -35,6 +34,7 @@ public class Controller implements Initializable {
     private Socket socket;
     private DataInputStream in;
     private DataOutputStream out;
+    private static Network net = Network.getINSTANCE();
 
 
     public void send(ActionEvent actionEvent) {
@@ -44,52 +44,44 @@ public class Controller implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        try {
-            socket = new Socket("localhost", 8189);
-            in = new DataInputStream(socket.getInputStream());
-            out = new DataOutputStream(socket.getOutputStream());
-            Thread t1 = new Thread(() -> {
-                while (true) {
-                    try {
-                        listView.setItems(clients);
-                        listView.refresh();
-//                        inputText.requestFocus();
-                        String message = in.readUTF();
-                        if (message.startsWith("/newClient")) {
-                            Platform.runLater(() -> listView.getItems().add(message.substring(11)));
-                        }
+        net.connect("localhost", 8189);
+        in = net.getInputStream();
+        out = net.getOutputStream();
 
-                        listView.setOnMouseClicked(mouseEvent -> {
-                            if(mouseEvent.getClickCount() == 2) {
-                                String cl = listView.getSelectionModel().getSelectedItems().get(0);
-                                nickName.setText(cl);
-                            }
-                        });
+        Thread t1 = new Thread(() -> {
+            while (true) {
+                try {
+                    listView.setItems(clients);
+                    listView.refresh();
+                        inputText.requestFocus();
+                    String message = in.readUTF();
 
-
-                        if (message.startsWith("/deleteClient")) {
-                            Platform.runLater(() -> listView.getItems().remove(message.substring(14)));
-                        }
-
-                        if (message.equals("/exit")) {
-                            in.close();
-                            out.close();
-                            break;
-                        }
-                        if (!message.isEmpty() && !message.contains("/n") && !message.startsWith("@") && !message.contains("/delete")) {
-                            Platform.runLater(() -> chatMsg.getItems().add(message));
-                        }
-
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                    if (message.startsWith("/newClient") || message.startsWith("/u")) {
+                        String[] s = message.split(" ", 2);
+                        Platform.runLater(() -> listView.getItems().addAll(s[1]));
                     }
+
+                    doubleClickLVItems();
+
+                    if (message.startsWith("/deleteClient")) {
+                        Platform.runLater(() -> listView.getItems().remove(message.substring(14)));
+                    }
+
+                    if (message.equals("/exit")) {
+                        quitChat();
+                        break;
+                    }
+                    if (!message.isEmpty() && !message.contains("/n") && !message.startsWith("@") && !message.contains("/delete")) {
+                        Platform.runLater(() -> chatMsg.getItems().add(message));
+                    }
+                    System.out.println(message);
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-            });
-            t1.setDaemon(true);
-            t1.start();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+            }
+        });
+        t1.setDaemon(true);
+        t1.start();
     }
 
     public void sendMessage() {
@@ -122,16 +114,39 @@ public class Controller implements Initializable {
         }
     }
 
+    public void doubleClickLVItems() {
+        listView.setOnMouseClicked(mouseEvent -> {
+            if(mouseEvent.getClickCount() == 2) {
+                String cl = listView.getSelectionModel().getSelectedItems().get(0);
+                nickName.setText(cl);
+            }
+        });
+    }
+
     public void sendEnter(KeyEvent keyEvent) {
         if (keyEvent.getCode().equals(KeyCode.ENTER)) {
             sendMessage();
         }
     }
 
+    public void quitChat() {
+        Platform.exit();
+    }
 
     public void exitChat(ActionEvent actionEvent) throws IOException {
         out.writeUTF("/exit");
         out.flush();
         Platform.exit();
+        System.exit(0);
     }
+
+    public static EventHandler<WindowEvent> getCloseEventHandler() {
+        return closeEventHandler;
+    }
+
+    private static EventHandler<WindowEvent> closeEventHandler =
+            event -> {
+                System.out.println("DO SMTH ON EXIT");
+                System.exit(1);
+            };
 }
