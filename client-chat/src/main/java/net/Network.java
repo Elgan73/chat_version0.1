@@ -83,7 +83,7 @@ public class Network {
     private boolean isConnect;
 
 
-    public static Network getINSTANCE() {
+    public static Network getInstance() {
         return INSTANCE;
     }
 

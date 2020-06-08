@@ -3,15 +3,22 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="460.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.Controller">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="460.0"
+            prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controllers.Controller">
 
     <Pane layoutX="4.0" layoutY="3.0" prefHeight="451.0" prefWidth="171.0">
-        <ListView fx:id="listView" layoutY="1.0" prefHeight="414.0" prefWidth="171.0" style="-fx-background-radius: 3;" />
-        <Button fx:id="exitChat" layoutY="418.0" mnemonicParsing="false" onAction="#exitChat" prefHeight="35.0" prefWidth="171.0" style="-fx-background-radius: 3;" text="Exit" />
+        <ListView fx:id="listView" layoutY="1.0" prefHeight="414.0" prefWidth="171.0"
+                  style="-fx-background-radius: 3;"/>
+        <Button fx:id="exitChat" layoutY="418.0" mnemonicParsing="false" onAction="#exitChat" prefHeight="35.0"
+                prefWidth="171.0" style="-fx-background-radius: 3;" text="Exit"/>
     </Pane>
-    <Button layoutX="540.0" layoutY="421.0" mnemonicParsing="false" onAction="#send" prefHeight="35.0" prefWidth="57.0" style="-fx-background-radius: 3;" text="Send" />
-<!--    <TextArea fx:id="chatMsg" blendMode="MULTIPLY" depthTest="DISABLE" editable="false" layoutX="177.0" layoutY="4.0" prefHeight="414.0" prefWidth="421.0" style="-fx-background-radius: 3;" />-->
-    <TextField fx:id="nickName" layoutX="177.0" layoutY="421.0" prefHeight="35.0" prefWidth="79.0" style="-fx-background-radius: 3;" />
-    <TextField fx:id="inputText" layoutX="258.0" layoutY="421.0" onKeyReleased="#sendEnter" prefHeight="35.0" prefWidth="280.0" style="-fx-background-radius: 3;" />
-   <ListView fx:id="chatMsg" layoutX="177.0" layoutY="4.0" prefHeight="414.0" prefWidth="420.0" style="-fx-background-radius: 3;" />
+    <Button layoutX="540.0" layoutY="421.0" mnemonicParsing="false" onAction="#send" prefHeight="35.0" prefWidth="57.0"
+            style="-fx-background-radius: 3;" text="Send"/>
+    <TextField fx:id="nickName" layoutX="177.0" layoutY="421.0" prefHeight="35.0" prefWidth="79.0"
+               style="-fx-background-radius: 3;"/>
+    <TextField fx:id="inputText" layoutX="258.0" layoutY="421.0" onKeyReleased="#sendEnter" prefHeight="35.0"
+               prefWidth="280.0" style="-fx-background-radius: 3;"/>
+    <ListView fx:id="chatMsg" layoutX="177.0" layoutY="4.0" prefHeight="414.0" prefWidth="420.0"
+              style="-fx-background-radius: 3;"/>
 </AnchorPane>

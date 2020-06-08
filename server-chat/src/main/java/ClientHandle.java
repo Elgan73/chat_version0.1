@@ -1,11 +1,9 @@
-import javax.xml.crypto.Data;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Collection;
 
 public class ClientHandle {
 
@@ -47,23 +45,19 @@ public class ClientHandle {
         }
     }
 
-    public void welcome() {
-
-    }
-
     public void authentication() {
         while (!isLoggedIn) {
             String clientMessage = getMsgFromClient();
             if (!clientMessage.isEmpty()) {
 
-                if(clientMessage.startsWith("/exit")) {
+                if (clientMessage.startsWith("/exit")) {
                     sendMsg("/exit");
                     exitChat();
                     return;
                 }
 
-                if(clientMessage.startsWith("/lp")) {
-                    if(isLoggedIn) {
+                if (clientMessage.startsWith("/lp")) {
+                    if (isLoggedIn) {
                         sendMsg("User already authorized");
                         continue;
                     }
@@ -78,31 +72,28 @@ public class ClientHandle {
         }
     }
 
-    public boolean authorization(String msg) {
+    public void authorization(String msg) {
         String[] command = msg.split(",", 3);
         String login = command[1];
         String pass = command[2];
 
-        if(!database.isClientInDbByName(login)) {
+        if (!database.isClientInDbByName(login)) {
             sendMsg("User not exist. Please sign up!");
-            return false;
-        } else if(!database.getClientCredentialByName(login)[1].equals(pass)) {
+        } else if (!database.getClientCredentialByName(login)[1].equals(pass)) {
             sendMsg(login + " password is wrong!");
-            return false;
         } else {
             setClientName(login);
             isLoggedIn = true;
             sendMsg("/authOk " + login + " successfully authorized");
 
             server.subscribe(this);
-//            sendMsg("/newClient " + this.clientName);
-            return true;
+            sendMsg("/newClient " + this.clientName);
         }
     }
 
     public void registration(String msg) {
         Connection connection = database.openConnection();
-        try{
+        try {
             System.out.println("Connection is close" + connection.isClosed());
         } catch (SQLException e) {
             e.printStackTrace();
@@ -111,11 +102,11 @@ public class ClientHandle {
         String[] command = msg.split(",", 3);
         String login = command[1];
         String pass = command[2];
-        if(!isTaken(login)) {
+        if (!isTaken(login)) {
             database.addClient(login, pass);
             sendMsg("/regOk " + login + " successfully registered");
             server.subscribe(this);
-//            sendMsg("/newClient " + this.clientName);
+            sendMsg("/newClient " + this.clientName);
 
         } else {
             sendMsg("NickName: " + login + " is busy");
@@ -128,15 +119,22 @@ public class ClientHandle {
         while (true) {
             String strFromClient = getMsgFromClient();
 
-            if(strFromClient.startsWith("/exit")) {
+            if (strFromClient.startsWith("/exit")) {
                 System.out.println(getClientName() + ": exit from chat");
                 exitChat();
                 break;
-            } else if(strFromClient.startsWith("/n")) {
+            }
+
+            if (strFromClient.startsWith("/n")) {
                 changeNickName(strFromClient);
-            } else if(strFromClient.startsWith("@")) {
+            }
+
+            if (strFromClient.startsWith("@")) {
                 server.sendPrivateMessage(strFromClient, this);
             }
+            System.out.println("от " + getClientName() + ": " + strFromClient);
+
+            server.broadCastMsg(strFromClient);
         }
     }
 
@@ -152,10 +150,10 @@ public class ClientHandle {
     }
 
     private String getMsgFromClient() {
-        String strFromClient ;
+        String strFromClient;
         try {
             strFromClient = in.readUTF();
-            System.out.println(strFromClient);
+            System.out.println(getClientName() +": " +strFromClient);
         } catch (IOException e) {
             // если поток обрывается вместо клиента пишем /exit
             System.out.println("handle IOException in getMsgFromClient() ");
@@ -166,7 +164,7 @@ public class ClientHandle {
 
     public void sendMsg(String msg) {
         try {
-            out.writeUTF(msg);
+            out.writeUTF(msg + "11111");
             out.flush();
         } catch (IOException e) {
             e.printStackTrace();
@@ -191,18 +189,5 @@ public class ClientHandle {
             e.printStackTrace();
         }
     }
-
-    public void parseMsg(String msg) {
-        if(msg.startsWith("/")) {
-            parseCommand(msg);
-        } else {
-            server.broadCastMsgWithoutSender(msg, this);
-        }
-    }
-
-    public void parseCommand(String msg) {
-//        if(msg.startsWith("/"))
-    }
-
 
 }

@@ -11,22 +11,12 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 
 public class Server {
 
-    static Map<ClientHandle, String> clientMap = new ConcurrentHashMap<>();
     private final static int PORT = 8189;
 
-    private static ConcurrentLinkedDeque<Client> allClients = new ConcurrentLinkedDeque<>();
-    private ConcurrentLinkedDeque<ClientHandle> clientsList;
+    private static ConcurrentLinkedDeque<ClientHandle> clientsList;
 
-//    public static ConcurrentLinkedDeque<ClientHandler> getClients() {
-//        return clients;
-//    }
-
-    protected void printOnlineClientsList() {
-        System.out.println(clientsList);
-    }
-
-    protected void printAllClients() {
-        System.out.println(allClients);
+    public static ConcurrentLinkedDeque<ClientHandle> getClientsList() {
+        return clientsList;
     }
 
     public Server(int port) {
@@ -60,17 +50,17 @@ public class Server {
         System.out.println("Сервер остановлен");
     }
 
-    public String clientAsString() {
-        StringBuilder strBld = new StringBuilder("/newClient ");
-        for (ClientHandle cl : clientsList) {
-            strBld.append(cl.getClientName()).append(",");
-        }
-        return strBld.toString();
-    }
+
+//    public String clientAsString() {
+//        StringBuilder strBld = new StringBuilder("/newClient ");
+//        for (ClientHandle cl : getClientsList()) {
+//            strBld.append(cl.getClientName()).append(",");
+//        }
+//        return strBld.toString();
+//    }
 
     public void subscribe(ClientHandle clientHandle) {
         clientsList.add(clientHandle);
-        clientMap.put(clientHandle, "");
         broadCastMsg(clientHandle.getClientName() + " присоединился к чату");
         broadCastClientList();
 
@@ -78,13 +68,12 @@ public class Server {
 
     public void unSubscribe(ClientHandle clientHandle) {
         clientsList.remove(clientHandle);
-        clientMap.remove(clientHandle);
         broadCastClientList();
     }
 
     public void broadCastClientList() {
-        StringBuilder sb = new StringBuilder("/u ");
-        for(ClientHandle cl : clientsList) {
+        StringBuilder sb = new StringBuilder("/newClient ");
+        for(ClientHandle cl : getClientsList()) {
             sb.append(cl.getClientName()).append(" ");
         }
         broadCastMsg(sb.toString());
@@ -92,8 +81,8 @@ public class Server {
     }
 
     public void broadCastMsg(String msg) {
-        for(ClientHandle cl : clientsList) {
-            cl.sendMsg(cl.getClientName() + " " + msg);
+        for(ClientHandle cl : getClientsList()) {
+            cl.sendMsg(cl.getClientName() + ": " + msg);
         }
     }
 
@@ -108,7 +97,7 @@ public class Server {
     public void sendPrivateMessage(String msg, ClientHandle clientHandle) {
         String tmpMsg = msg.substring(1);
         String[] clientMsg = tmpMsg.split(" ", 3);
-        for(ClientHandle cl : clientsList) {
+        for(ClientHandle cl : getClientsList()) {
             if(cl.getClientName().equals(clientMsg[1])) {
                 cl.sendMsg("Private from " + clientHandle.getClientName() + " " + msg);
                 return;
@@ -117,11 +106,7 @@ public class Server {
     }
 
 
-
-
-
-
-    public static void main(String[] args) throws ClassNotFoundException {
+    public static void main(String[] args) {
         new Server(PORT);
     }
 }

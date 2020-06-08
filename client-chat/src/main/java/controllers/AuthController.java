@@ -8,13 +8,14 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import net.Network;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.net.Socket;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -23,7 +24,7 @@ public class AuthController implements Initializable {
     public TextField userLogin;
     public TextField userPassword;
     public Button registration;
-    private static Network net = Network.getINSTANCE();
+    private static final Network net = Network.getInstance();
     private DataInputStream in;
     private DataOutputStream out;
 
@@ -64,6 +65,12 @@ public class AuthController implements Initializable {
         }
     }
 
+    public void pressEnter(KeyEvent keyEvent) {
+        if(keyEvent.getCode().equals(KeyCode.ENTER)){
+            sendRequest();
+        }
+    }
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -83,12 +90,14 @@ public class AuthController implements Initializable {
                         Platform.runLater(() -> {
                             enterChat.getScene().getWindow().hide();
                         });
+                        break;
                     }
 //                    else {
 //                        System.out.println("smth wrong with authority!");
 //                    }
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    System.out.println("Lost server connection");
+                    break;
                 }
             }
         });
