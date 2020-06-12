@@ -66,7 +66,7 @@ public class AuthController implements Initializable {
     }
 
     public void pressEnter(KeyEvent keyEvent) {
-        if(keyEvent.getCode().equals(KeyCode.ENTER)){
+        if (keyEvent.getCode().equals(KeyCode.ENTER)) {
             sendRequest();
         }
     }
@@ -75,7 +75,7 @@ public class AuthController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        net.connect("localhost", 8189);
+//        net.connect("localhost", 8189);
         in = net.getInputStream();
         out = net.getOutputStream();
 
@@ -90,12 +90,6 @@ public class AuthController implements Initializable {
                         Platform.runLater(() -> enterChat.getScene().getWindow().hide());
                         break;
                     }
-//                    if(msg.equals("/authError")) {
-//                        Platform.runLater(() -> );
-//                    }
-//                    else {
-//                        System.out.println("smth wrong with authority!");
-//                    }
                 } catch (Exception e) {
                     System.out.println("Lost server connection");
                     break;
@@ -112,9 +106,7 @@ public class AuthController implements Initializable {
 
     public void intentRegistration(ActionEvent actionEvent) {
         Platform.runLater(this::openRegistrationWindow);
-        Platform.runLater(() -> {
-            registration.getScene().getWindow().hide();
-        });
+        registration.getScene().getWindow().hide();
     }
 }
 
