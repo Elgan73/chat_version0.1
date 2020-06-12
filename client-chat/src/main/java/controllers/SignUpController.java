@@ -14,7 +14,6 @@ import net.Network;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.net.Socket;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -26,7 +25,7 @@ public class SignUpController implements Initializable {
     public TextField userSignUpPass;
     private DataOutputStream out;
     private DataInputStream in;
-    private static Network net = Network.getINSTANCE();
+    private static final Network net = Network.getInstance();
 
     private void openChatWindow() {
         FXMLLoader loader = new FXMLLoader();
