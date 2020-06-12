@@ -1,24 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="460.0"
-            prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="controllers.Controller">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="460.0" prefWidth="600.0" style="-fx-background-color: #2C2C45;" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.Controller">
 
     <Pane layoutX="4.0" layoutY="3.0" prefHeight="451.0" prefWidth="171.0">
-        <ListView fx:id="listView" layoutY="1.0" prefHeight="414.0" prefWidth="171.0"
-                  style="-fx-background-radius: 3;"/>
-        <Button fx:id="exitChat" layoutY="418.0" mnemonicParsing="false" onAction="#exitChat" prefHeight="35.0"
-                prefWidth="171.0" style="-fx-background-radius: 3;" text="Exit"/>
+        <ListView fx:id="listView" layoutY="1.0" prefHeight="414.0" prefWidth="171.0" style="-fx-background-color: #2C2C45; -fx-border-radius: 3; -fx-border-color: #CFCED0;" stylesheets="@listViewStyleCell.css" />
+        <Button fx:id="exitChat" layoutY="418.0" mnemonicParsing="false" onAction="#exitChat" prefHeight="35.0" prefWidth="171.0" style="-fx-background-color: #43426B; -fx-border-color: #CFCED0; -fx-border-radius: 3;" text="Exit" textAlignment="CENTER" textFill="WHITE" />
+        <!--       <Button layoutX="84.0" layoutY="256.0" mnemonicParsing="false" onAction="#send" prefHeight="35.0" prefWidth="57.0" style="-fx-background-color: #43426B; -fx-border-radius: 3; -fx-border-color: #CFCED0;" text="Send" textAlignment="CENTER" textFill="WHITE">-->
     </Pane>
-    <Button layoutX="540.0" layoutY="421.0" mnemonicParsing="false" onAction="#send" prefHeight="35.0" prefWidth="57.0"
-            style="-fx-background-radius: 3;" text="Send"/>
-    <TextField fx:id="nickName" layoutX="177.0" layoutY="421.0" prefHeight="35.0" prefWidth="79.0"
-               style="-fx-background-radius: 3;"/>
-    <TextField fx:id="inputText" layoutX="258.0" layoutY="421.0" onKeyReleased="#sendEnter" prefHeight="35.0"
-               prefWidth="280.0" style="-fx-background-radius: 3;"/>
-    <ListView fx:id="chatMsg" layoutX="177.0" layoutY="4.0" prefHeight="414.0" prefWidth="420.0"
-              style="-fx-background-radius: 3;"/>
+    <TextField fx:id="nickName" layoutX="177.0" layoutY="421.0" prefHeight="35.0" prefWidth="79.0" style="-fx-background-color: #43426B; -fx-border-color: #CFCED0; -fx-border-radius: 3;" stylesheets="@inputAreaStyleText.css" />
+    <TextField fx:id="inputText" layoutX="258.0" layoutY="421.0" onKeyReleased="#sendEnter" prefHeight="35.0" prefWidth="300.0" promptText="Type your message..." style="-fx-background-color: #43426B; -fx-border-color: #CFCED0; -fx-border-radius: 3;" stylesheets="@inputAreaStyleText.css" />
+    <ListView fx:id="chatMsg" layoutX="177.0" layoutY="4.0" prefHeight="414.0" prefWidth="420.0" style="-fx-background-color: #2C2C45; -fx-border-color: #CFCED0; -fx-border-radius: 3;" stylesheets="@listViewStyleCell.css" />
+
+    <ImageView fitHeight="35.0" fitWidth="31.0" layoutX="563.0" layoutY="423.0" onMouseClicked="#send" pickOnBounds="true" preserveRatio="true">
+        <Image url="@arrow.png" />
+    </ImageView>
 </AnchorPane>

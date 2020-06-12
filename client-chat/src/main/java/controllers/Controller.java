@@ -4,11 +4,14 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.text.TextFlow;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 import net.Network;
 
@@ -27,13 +30,14 @@ public class Controller implements Initializable {
     public Button exitChat;
     public ListView<String> chatMsg;
     private DataInputStream in;
+    public TextFlow textFlow;
     private DataOutputStream out;
     private static final Network net = Network.getInstance();
     private File history;
     private String myNickName;
 
 
-    public void send(ActionEvent actionEvent) throws IOException {
+    public void send(MouseEvent actionEvent) throws IOException {
         sendMessage();
     }
 
@@ -80,9 +84,31 @@ public class Controller implements Initializable {
                     }
                 } else {
 
-                    Date date = new Date();
-                    SimpleDateFormat formatOfDate = new SimpleDateFormat("HH:mm:ss");
-                    String msgFromSrv = formatOfDate.format(date)+ " " + message;
+
+                    String msgFromSrv = message;
+//                    listView.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
+//                        @Override
+//                        public ListCell<String> call(ListView<String> stringListView) {
+//                            return new ListCell<>() {
+//                                @Override
+//                                protected void updateItem(String item, boolean empty) {
+//                                    super.updateItem(item, empty);
+//                                    if(empty || item == null) {
+//                                        return;
+//                                    }
+//                                    Date date = new Date();
+//                                    SimpleDateFormat formatOfDate = new SimpleDateFormat("HH:mm");
+//                                    String time = formatOfDate.format(date);
+//                                    Label nick = new Label(myNickName);
+//                                    Label tm = new Label(time);
+//                                    Label clientMsg = new Label(msgFromSrv);
+//                                    HBox hBox = new HBox(tm, clientMsg);
+//                                    VBox vBox = new VBox(nick, hBox);
+//                                    setGraphic(vBox);
+//                                }
+//                            };
+//                        }
+//                    });
                     Platform.runLater(() -> chatMsg.getItems().addAll(msgFromSrv));
                     writeMessageToFile(history, msgFromSrv);
                 }
@@ -105,8 +131,33 @@ public class Controller implements Initializable {
                 e.printStackTrace();
             }
             Date date = new Date();
-            SimpleDateFormat formatOfDate = new SimpleDateFormat("HH:mm:ss");
+            SimpleDateFormat formatOfDate = new SimpleDateFormat("HH:mm");
             String finalMessage = formatOfDate.format(date) + " " +  myNickName + " : " + inputText.getText();
+//            listView.setCellFactory(new Callback<>() {
+//                @Override
+//                public ListCell<String> call(ListView<String> stringListView) {
+//                    return new ListCell<>() {
+//                        @Override
+//                        protected void updateItem(String item, boolean empty) {
+//                            super.updateItem(item, empty);
+//                            if (item != null && !empty) {
+//                                Date date = new Date();
+//                                SimpleDateFormat formatOfDate = new SimpleDateFormat("HH:mm");
+//                                String time = formatOfDate.format(date);
+//                                Label nick = new Label(myNickName);
+//                                Label tm = new Label(time);
+//                                Label clientMsg = new Label(inputText.getText());
+//                                HBox hBox = new HBox(tm, clientMsg);
+//                                VBox vBox = new VBox(nick, hBox);
+//                                setGraphic(vBox);
+//                            } else {
+//                                setGraphic(null);
+//                            }
+//
+//                        }
+//                    };
+//                }
+//            });
             chatMsg.getItems().addAll(finalMessage);
             writeMessageToFile(history, finalMessage);
         }
@@ -118,7 +169,7 @@ public class Controller implements Initializable {
         if (!nickName.getText().isEmpty()) {
             String a = "@ " + nickName.getText() + " " + msg;
             Date date = new Date();
-            SimpleDateFormat formatOfDate = new SimpleDateFormat("HH:mm:ss");
+            SimpleDateFormat formatOfDate = new SimpleDateFormat("HH:mm");
             String privateMsg = formatOfDate.format(date) + " " + myNickName + " -> " + nickName.getText() + ": " + msg;
             try{
                 out.writeUTF(a);
@@ -194,6 +245,6 @@ public class Controller implements Initializable {
                 System.out.println("DO SMTH ON EXIT");
                 System.exit(1);
             };
-
-
 }
+
+

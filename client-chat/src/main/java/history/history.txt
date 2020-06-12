@@ -1,38 +1,52 @@
-18:07:42Hello Kir
-18:07:58Hello Tik
-18:08:12 Tik -> Kir: hi
-18:08:12Tik -> Kir: hi
-18:08:46 Hello Kir
-18:09:07 Hello Tik
-18:09:12 Tik : Hi
-18:09:12 Tik: Hi
-18:09:16 Tik -> Kir: Hi
-18:09:16 Tik -> Kir: Hi
-18:09:25 Kir: gngdfnfgn
-18:09:25 Kir : gngdfnfgn
-18:09:38 Kir : Всем чмоки в этом чатике!!!
-18:09:38 Kir: Всем чмоки в этом чатике!!!
-18:09:54 Kir -> Tik: А тебе индивидуальный чмок
-18:09:54 Kir -> Tik: А тебе индивидуальный чмок
-18:37:36 Hello 7
-18:39:01 Hello 6
-18:39:12 6 : Heheheheheh
-18:39:15 6 : dfbdbdf
-18:39:16 6 : dfbdfb
-18:39:16 6 : dfb
-18:39:16 6 : dfb
-18:39:16 6 : fb
-18:39:17 6 : dfb
-18:39:28 Hello Kir
-18:39:32 Kir -> 6: Hi
-18:39:32 Kir -> 6: Hi
-18:49:49 Hello Kir
-19:00:29 Hello Kir
-22:40:19 Hello Kir
-22:43:28 Hello 15
-23:03:58 Hello Kir
-23:14:53 Hello Kir
-23:32:54 Hello Kir
-23:33:11 Hello 34
-23:33:16 34 : Hi
-23:41:30 Hello Kir
+01:08 Hello Kir
+01:08 Kir : hi
+01:08 Kir : hi
+01:08 Kir : hi
+01:08 Kir : hi
+01:08 Kir : hi
+Hello Kir
+01:15 Kir : hi
+01:15 Kir : kbkbkb
+Hello Kir
+01:17 Kir : Hi
+01:17 Kir : fghnfn
+01:17 Kir : gfnfgnfg
+Hello 1
+01:17 1 : gngngn
+01:17 1 : gngngn
+01:18 1 : gngng
+01:18 1 : gngngn
+Hello Kir
+01:20 1 : 321321
+Hello 1
+01:44 1 : gngngn
+Hello Kir
+01:46 Kir : Hi
+01:47 Kir : Чо как живется?
+Hello 1
+1: да норм)))
+01:47 1 : да норм)))
+Hello Tik
+01:48 Tik -> Kir: Hi
+Tik -> Kir: Hi
+Hello 342
+01:49 342 : Hi
+Hello 333
+01:50 333 -> 342: hi
+333 -> 342: hi
+Hello Kir
+01:55 Kir : 321321
+Hello 1
+02:01 1 : ghnghnmgh
+02:01 1 : hmghmh
+02:01 1 : ,kh,ghk
+02:01 1 : hnmnhf
+Hello Kir
+Hello 1
+02:23 1 : :)
+02:23 1 : :-)
+02:23 1 : )
+02:23 1 : =)
+Hello Kir
+Hello 1
+Hello 2213

@@ -13,6 +13,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import net.Network;
 
 import java.io.DataInputStream;
@@ -41,7 +42,7 @@ public class AuthController implements Initializable {
         Parent root = loader.getRoot();
         Stage stage = new Stage();
         stage.setScene(new Scene(root));
-
+        stage.initStyle(StageStyle.UNDECORATED);
         stage.showAndWait();
     }
 
@@ -54,7 +55,8 @@ public class AuthController implements Initializable {
         }
     }
 
-    public void pressEnter(KeyEvent keyEvent) {
+
+    public void enterChat(KeyEvent keyEvent) {
         if (keyEvent.getCode().equals(KeyCode.ENTER)) {
             sendRequest();
         }
@@ -99,6 +101,8 @@ public class AuthController implements Initializable {
         Platform.exit();
         System.exit(0);
     }
+
+
 }
 
 
