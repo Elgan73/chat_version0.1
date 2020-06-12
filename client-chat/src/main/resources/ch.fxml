@@ -9,7 +9,6 @@
     <Pane layoutX="4.0" layoutY="3.0" prefHeight="451.0" prefWidth="171.0">
         <ListView fx:id="listView" layoutY="1.0" prefHeight="414.0" prefWidth="171.0" style="-fx-background-color: #2C2C45; -fx-border-radius: 3; -fx-border-color: #CFCED0;" stylesheets="@listViewStyleCell.css" />
         <Button fx:id="exitChat" layoutY="418.0" mnemonicParsing="false" onAction="#exitChat" prefHeight="35.0" prefWidth="171.0" style="-fx-background-color: #43426B; -fx-border-color: #CFCED0; -fx-border-radius: 3;" text="Exit" textAlignment="CENTER" textFill="WHITE" />
-        <!--       <Button layoutX="84.0" layoutY="256.0" mnemonicParsing="false" onAction="#send" prefHeight="35.0" prefWidth="57.0" style="-fx-background-color: #43426B; -fx-border-radius: 3; -fx-border-color: #CFCED0;" text="Send" textAlignment="CENTER" textFill="WHITE">-->
     </Pane>
     <TextField fx:id="nickName" layoutX="177.0" layoutY="421.0" prefHeight="35.0" prefWidth="79.0" style="-fx-background-color: #43426B; -fx-border-color: #CFCED0; -fx-border-radius: 3;" stylesheets="@inputAreaStyleText.css" />
     <TextField fx:id="inputText" layoutX="258.0" layoutY="421.0" onKeyReleased="#sendEnter" prefHeight="35.0" prefWidth="300.0" promptText="Type your message..." style="-fx-background-color: #43426B; -fx-border-color: #CFCED0; -fx-border-radius: 3;" stylesheets="@inputAreaStyleText.css" />

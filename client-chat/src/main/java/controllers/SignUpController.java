@@ -57,14 +57,12 @@ public class SignUpController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         net.connect("localhost", 8189);
-
         in = net.getInputStream();
         out = net.getOutputStream();
         System.out.println(net.toString());
         Thread tr = new Thread(() -> {
             String msg;
             while (true) {
-
                 try {
                     msg = in.readUTF();
                     System.out.println(msg);
@@ -75,18 +73,14 @@ public class SignUpController implements Initializable {
                         });
                         break;
                     }
-
                 } catch (IOException e) {
                     e.printStackTrace();
                     break;
                 }
             }
-
         });
         tr.setDaemon(true);
         tr.start();
-
-
     }
 
     public void clickSignUpBtn(ActionEvent actionEvent) {

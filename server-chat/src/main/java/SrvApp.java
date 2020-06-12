@@ -83,21 +83,15 @@ public class SrvApp {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-
         String passwordFromDB = null;
-
         try (Connection connection = DriverManager.getConnection("jdbc:sqlite:/Users/devapps4selling/IdeaProjects/chat/server-chat/starkchat.db")) {
-
             PreparedStatement passwordRequest = connection.prepareStatement("select pass_usr from users where login_usr = ?;");
             passwordRequest.setString(1, login);
             ResultSet resultSet = passwordRequest.executeQuery();
             passwordFromDB = resultSet.getString("pass_usr");
-
-
         } catch (SQLException throwable) {
             System.out.println("А юзверя-то и нет =(");
         }
-
         if (passwordFromDB != null) {
             return passwordFromDB.equals(password);
         } else {
@@ -119,7 +113,7 @@ public class SrvApp {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        if(isUserDataConfirmed(login, pass)) {
+        if (isUserDataConfirmed(login, pass)) {
             return true;
         } else {
             System.out.println("Проблема при записи в базу");
@@ -134,8 +128,6 @@ public class SrvApp {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-
-
         try (Connection connection = DriverManager.getConnection("jdbc:sqlite:/Users/devapps4selling/IdeaProjects/chat/server-chat/starkchat.db")) {
             String query = "select login_usr from users where login_usr = '" + login + "'";
             Statement st = connection.createStatement();
@@ -158,7 +150,6 @@ public class SrvApp {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-
         try (Connection connection = DriverManager.getConnection("jdbc:sqlite:/Users/devapps4selling/IdeaProjects/chat/server-chat/starkchat.db")) {
             String changeNickName = "UPDATE users SET login_usr = '" + newName + "' WHERE login_usr = '" + name + "'";
             Statement st = connection.createStatement();

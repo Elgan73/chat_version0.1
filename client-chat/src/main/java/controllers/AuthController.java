@@ -55,21 +55,17 @@ public class AuthController implements Initializable {
         }
     }
 
-
     public void enterChat(KeyEvent keyEvent) {
         if (keyEvent.getCode().equals(KeyCode.ENTER)) {
             sendRequest();
         }
     }
 
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
         net.connect("localhost", 8189);
         in = net.getInputStream();
         out = net.getOutputStream();
-
         Thread t = new Thread(() -> {
             String msg;
             while (true) {
@@ -101,8 +97,6 @@ public class AuthController implements Initializable {
         Platform.exit();
         System.exit(0);
     }
-
-
 }
 
 

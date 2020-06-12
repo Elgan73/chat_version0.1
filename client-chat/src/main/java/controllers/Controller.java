@@ -9,9 +9,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.TextFlow;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 import net.Network;
 
@@ -20,7 +17,6 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.ResourceBundle;
-
 
 public class Controller implements Initializable {
     //    ObservableList<String> clients = FXCollections.observableArrayList();
@@ -36,24 +32,17 @@ public class Controller implements Initializable {
     private File history;
     private String myNickName;
 
-
     public void send(MouseEvent actionEvent) throws IOException {
         sendMessage();
     }
 
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
         inputText.requestFocus();
-
-//        net.connect("localhost", 8189);
         in = net.getInputStream();
         out = net.getOutputStream();
-
         doubleClickLVItems();
         readHistoryFromFile();
-
         Thread t = new Thread(this::readMsg);
         t.setDaemon(true);
         t.start();
@@ -83,8 +72,6 @@ public class Controller implements Initializable {
                         Platform.runLater(() -> listView.getItems().remove(finalMessage1.substring(14)));
                     }
                 } else {
-
-
                     String msgFromSrv = message;
 //                    listView.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
 //                        @Override
@@ -122,7 +109,6 @@ public class Controller implements Initializable {
 
     private void sendMessage() {
         String msg = inputText.getText();
-
         if (!inputText.getText().isEmpty() && nickName.getText().isEmpty()) {
             try {
                 out.writeUTF(msg);
@@ -187,7 +173,6 @@ public class Controller implements Initializable {
 
     private void readHistoryFromFile() {
         history = new File("/Users/devapps4selling/IdeaProjects/chat/client-chat/src/main/java/history/history.txt");
-
         try {
             history.createNewFile();
             BufferedReader readHistoryFromFile = new BufferedReader(new FileReader(history));
