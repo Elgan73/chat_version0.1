@@ -30,12 +30,6 @@ public class SrvApp {
                     System.out.println(client.getNickName() + " accepted!");
                     new Thread(client).start();
                 }
-//                else if(reg(socket)) {
-//                    ClientHandler client = new ClientHandler(socket, lastConnectedNickName);
-//                    clients.add(client);
-//                    System.out.println(client.getNickName() + " accepted!");
-//                    new Thread(client).start();
-//                }
             }
         } catch (Exception e) {
             System.out.println("Неудачная попытка авторизации.");
@@ -64,8 +58,7 @@ public class SrvApp {
                         out.flush();
                         System.out.println("Авторизация отклонена");
                     }
-                }
-                if (clientMessage.startsWith("/regUser")) {
+                } else if (clientMessage.startsWith("/regUser")) {
                     String[] splitMsg = clientMessage.split(",", 3);
                     if (createUser(splitMsg[1], splitMsg[2])) {
                         System.out.println("Регистрация прошла успешна");

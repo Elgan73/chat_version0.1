@@ -11,7 +11,6 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import net.Network;
 
-import javax.naming.Context;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -20,13 +19,11 @@ import java.util.ResourceBundle;
 
 public class SignUpController implements Initializable {
 
-
     public Button signUpBtn;
     public TextField userSignUpLogin;
     public TextField userSignUpPass;
     private DataOutputStream out;
     private DataInputStream in;
-    private Context context;
     private static final Network net = Network.getInstance();
 
     private void openChatWindow() {
@@ -64,7 +61,7 @@ public class SignUpController implements Initializable {
 
                 try {
                     msg = in.readUTF();
-
+                    System.out.println(msg);
                     if (msg.startsWith("/regOk")) {
                         Platform.runLater(this::openChatWindow);
                         Platform.runLater(() -> {
