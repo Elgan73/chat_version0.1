@@ -15,6 +15,7 @@ public class ClientHandler implements Runnable {
 
     public ClientHandler(Socket socket, String nickName) throws IOException {
         this.socket = socket;
+        this.nickName = nickName;
         in = new DataInputStream(socket.getInputStream());
         out = new DataOutputStream(socket.getOutputStream());
         running = true;
@@ -36,7 +37,7 @@ public class ClientHandler implements Runnable {
             cl.sendMessage("/newClient " + this.nickName);
             this.sendMessage("/newClient " + cl.getNickName());
         }
-        out.writeUTF("Hello " + nickName + "\n");
+        out.writeUTF("Hello " + nickName);
         out.flush();
     }
 
@@ -55,26 +56,19 @@ public class ClientHandler implements Runnable {
         }
     }
 
-//    public void regUser(String login, String pass) {
-//        srvApp.createUser(login, pass);
-//    }
-//
-//    public void authUser(String login, String pass) {
-//        srvApp.isUserDataConfirmed(login, pass);
-//    }
 
-    public synchronized void sendMessage(String message) throws IOException {
-        out.writeUTF(message);
-        out.flush();
-    }
 
     public void sendPrivateMsg(String name, String msg) throws IOException {
         for (ClientHandler cl : SrvApp.getClients()) {
             if (name.equals(cl.getNickName())) {
                 cl.sendMessage(this.nickName + " -> " + cl.getNickName() + ": " + msg);
-                this.sendMessage(this.nickName + " -> " + cl.getNickName() + ": " + msg);
             }
         }
+    }
+
+    public synchronized void sendMessage(String message) throws IOException {
+        out.writeUTF(message);
+        out.flush();
     }
 
     public synchronized void changeNickName(String msg) throws IOException {
@@ -123,14 +117,15 @@ public class ClientHandler implements Runnable {
                         } else if (clientMessage.startsWith("/n")) {
                             changeNickName(clientMessage);
                         } else if (clientMessage.startsWith("@")) {
-                            String msg = clientMessage.substring(1);
+                            String msg = clientMessage.substring(2);
+                            System.out.println(msg);
                             String[] user = msg.split(" ", 2);
                             sendPrivateMsg(user[0], user[1]);
                         } else {
                             broadCastMessage(getNickName() + ": " + clientMessage);
                         }
                     }
-                    System.out.println("!!!!!!" + getNickName() + ": " + clientMessage);
+                    System.out.println(getNickName() + ": " + clientMessage);
                 }
             } catch (Exception ex) {
                 System.out.println("Потеряна связь с клиентом: " + this.nickName);

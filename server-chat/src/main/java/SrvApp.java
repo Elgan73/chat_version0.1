@@ -26,13 +26,13 @@ public class SrvApp {
 
                 if (auth(socket)) {
                     ClientHandler client = new ClientHandler(socket, lastConnectedNickName);
-                    clients.add(client); // can produce CME (concurrent modification exception)
+                    clients.add(client);
                     System.out.println(client.getNickName() + " accepted!");
                     new Thread(client).start();
                 }
-//                if(reg(socket)) {
+//                else if(reg(socket)) {
 //                    ClientHandler client = new ClientHandler(socket, lastConnectedNickName);
-//                    clients.add(client); // can produce CME (concurrent modification exception)
+//                    clients.add(client);
 //                    System.out.println(client.getNickName() + " accepted!");
 //                    new Thread(client).start();
 //                }
@@ -53,7 +53,7 @@ public class SrvApp {
                 if (clientMessage.startsWith("/lp")) { //приватное сообщение
                     String[] splitClientMessage = clientMessage.split(",", 3);
 
-                    if (!isUserDataConfirmed(splitClientMessage[1], splitClientMessage[2])) {
+                    if (isUserDataConfirmed(splitClientMessage[1], splitClientMessage[2])) {
                         System.out.println("Успешная авторизация");
                         out.writeUTF("/authOk");
                         out.flush();
@@ -65,30 +65,16 @@ public class SrvApp {
                         System.out.println("Авторизация отклонена");
                     }
                 }
-            }
-        }
-        return true;
-    }
-
-    private boolean reg(Socket socket) throws IOException {
-        DataInputStream in = new DataInputStream(socket.getInputStream());
-        DataOutputStream out = new DataOutputStream(socket.getOutputStream());
-        while (true) {
-            if (socket.isConnected()) {
-                String clientMessage = in.readUTF();
-                System.out.println(clientMessage);
-
                 if (clientMessage.startsWith("/regUser")) {
                     String[] splitMsg = clientMessage.split(",", 3);
-                    if (!createUser(splitMsg[1], splitMsg[2])) {
+                    if (createUser(splitMsg[1], splitMsg[2])) {
                         System.out.println("Регистрация прошла успешна");
                         out.writeUTF("/regOk");
                         out.flush();
+                        lastConnectedNickName = splitMsg[1];
                         break;
                     } else {
                         System.out.println("Такой юзверь уже есть");
-                        out.writeUTF("/regNone");
-                        out.flush();
                     }
                 }
             }
@@ -98,14 +84,14 @@ public class SrvApp {
 
     public boolean isUserDataConfirmed(String login, String password) {
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
+            Class.forName("org.sqlite.JDBC");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
 
         String passwordFromDB = null;
 
-        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/chat", "root", "12345678")) {
+        try (Connection connection = DriverManager.getConnection("jdbc:sqlite:/Users/devapps4selling/IdeaProjects/chat/server-chat/starkchat.db")) {
 
             PreparedStatement passwordRequest = connection.prepareStatement("select pass_usr from users where login_usr = ?;");
             passwordRequest.setString(1, login);
@@ -126,47 +112,44 @@ public class SrvApp {
 
     public boolean createUser(String login, String pass) {
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
+            Class.forName("org.sqlite.JDBC");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-
-        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/chat", "root", "12345678")) {
-            String createUser =
-                    "INSERT INTO USERS (login_usr, pass_usr) VALUES ('" + login + "','" + pass + "');";
-            Statement statement = connection.createStatement();
-            if (clientAlreadyExist(login)) {
-                System.out.println("Client exist");
-                return false;
-            } else {
-                statement.execute(createUser);
-                return true;
-            }
-
+        String user = null;
+        try (Connection connection = DriverManager.getConnection("jdbc:sqlite:/Users/devapps4selling/IdeaProjects/chat/server-chat/starkchat.db")) {
+            PreparedStatement createUserRequest = connection.prepareStatement("insert into users (login_usr, pass_usr) values (?, ?);");
+            createUserRequest.setString(1, login);
+            createUserRequest.setString(2, pass);
+            createUserRequest.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
+        if(isUserDataConfirmed(login, pass)) {
+            return true;
+        } else {
+            System.out.println("Проблема при записи в базу");
+            return false;
+        }
+
     }
 
     public boolean clientAlreadyExist(String login) {
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
+            Class.forName("org.sqlite.JDBC");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
 
 
-        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/chat", "root", "12345678")) {
+        try (Connection connection = DriverManager.getConnection("jdbc:sqlite:/Users/devapps4selling/IdeaProjects/chat/server-chat/starkchat.db")) {
             String query = "select login_usr from users where login_usr = '" + login + "'";
             Statement st = connection.createStatement();
             ResultSet resultSet = st.executeQuery(query);
-            {
-                while (resultSet.next()) {
-                    if (resultSet.getString("login_usr").toLowerCase().equalsIgnoreCase(login)) {
-                        System.out.println("isClientInDbName" + true);
-                        return true;
-                    }
+            while (resultSet.next()) {
+                if (resultSet.getString("login_usr").equals(login)) {
+                    System.out.println("isClientInDbName" + true);
+                    return true;
                 }
             }
         } catch (SQLException e) {
@@ -177,12 +160,12 @@ public class SrvApp {
 
     public boolean changeNickName(String name, String newName) {
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
+            Class.forName("org.sqlite.JDBC");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
 
-        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/chat", "root", "12345678")) {
+        try (Connection connection = DriverManager.getConnection("jdbc:sqlite:/Users/devapps4selling/IdeaProjects/chat/server-chat/starkchat.db")) {
             String changeNickName = "UPDATE users SET login_usr = '" + newName + "' WHERE login_usr = '" + name + "'";
             Statement st = connection.createStatement();
             if (!clientAlreadyExist(newName)) {

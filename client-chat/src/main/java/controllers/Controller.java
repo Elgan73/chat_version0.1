@@ -14,6 +14,8 @@ import net.Network;
 
 import java.io.*;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.ResourceBundle;
 
 
@@ -28,6 +30,7 @@ public class Controller implements Initializable {
     private DataOutputStream out;
     private static final Network net = Network.getInstance();
     private File history;
+    private String myNickName;
 
 
     public void send(ActionEvent actionEvent) throws IOException {
@@ -40,7 +43,7 @@ public class Controller implements Initializable {
 
         inputText.requestFocus();
 
-        net.connect("localhost", 8189);
+//        net.connect("localhost", 8189);
         in = net.getInputStream();
         out = net.getOutputStream();
 
@@ -57,7 +60,10 @@ public class Controller implements Initializable {
         while (true) {
             try {
                 message = in.readUTF();
-                System.out.println(message);
+                if(message.startsWith("Hello")) {
+                    String[] msg = message.split(" ", 2);
+                    myNickName = msg[1];
+                }
                 if (message.startsWith("/")) {
                     if (message.equals("/exit")) {
                         in.close();
@@ -74,9 +80,11 @@ public class Controller implements Initializable {
                     }
                 } else {
 
-                    String finalMessage = message;
-                    Platform.runLater(() -> chatMsg.getItems().addAll("HAHAHHAHAH " + finalMessage));
-                    writeMessageToFile(history, finalMessage);
+                    Date date = new Date();
+                    SimpleDateFormat formatOfDate = new SimpleDateFormat("HH:mm:ss");
+                    String msgFromSrv = formatOfDate.format(date)+ " " + message;
+                    Platform.runLater(() -> chatMsg.getItems().addAll(msgFromSrv));
+                    writeMessageToFile(history, msgFromSrv);
                 }
 
             } catch (IOException e) {
@@ -86,32 +94,48 @@ public class Controller implements Initializable {
         }
     }
 
-    public void sendMessage() throws IOException {
+    private void sendMessage() {
         String msg = inputText.getText();
 
         if (!inputText.getText().isEmpty() && nickName.getText().isEmpty()) {
-            out.writeUTF(msg);
-            out.flush();
-            Platform.runLater(() -> chatMsg.getItems().addAll(msg));
+            try {
+                out.writeUTF(msg);
+                out.flush();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Date date = new Date();
+            SimpleDateFormat formatOfDate = new SimpleDateFormat("HH:mm:ss");
+            String finalMessage = formatOfDate.format(date) + " " +  myNickName + " : " + inputText.getText();
+            chatMsg.getItems().addAll(finalMessage);
+            writeMessageToFile(history, finalMessage);
         }
 
         if (inputText.getText().equals("") || inputText.getText().equals(" ")) {
-            Platform.runLater(() -> chatMsg.getItems().add("Вы не ввели сообщение"));
+            chatMsg.getItems().add("Вы не ввели сообщение");
         }
 
         if (!nickName.getText().isEmpty()) {
-            String a = "@" + nickName.getText() + " " + msg;
-            out.writeUTF(a + "\n");
-            out.flush();
+            String a = "@ " + nickName.getText() + " " + msg;
+            Date date = new Date();
+            SimpleDateFormat formatOfDate = new SimpleDateFormat("HH:mm:ss");
+            String privateMsg = formatOfDate.format(date) + " " + myNickName + " -> " + nickName.getText() + ": " + msg;
+            try{
+                out.writeUTF(a);
+                out.flush();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            chatMsg.getItems().add(privateMsg);
+            writeMessageToFile(history, privateMsg);
         }
-        writeMessageToFile(history, msg);
         inputText.clear();
         inputText.requestFocus();
 
     }
 
     private void readHistoryFromFile() {
-        history = new File("chat-client/history.txt");
+        history = new File("/Users/devapps4selling/IdeaProjects/chat/client-chat/src/main/java/history/history.txt");
 
         try {
             history.createNewFile();

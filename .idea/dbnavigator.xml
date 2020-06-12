@@ -23,18 +23,22 @@
     <autoscroll-to-editor value="false" />
     <autoscroll-from-editor value="true" />
     <show-object-properties value="true" />
-    <loaded-nodes />
+    <loaded-nodes>
+      <connection connection-id="c269d55e-468d-4620-8123-68878dfd838b">
+        <schema name="main" object-types="table, view" />
+      </connection>
+    </loaded-nodes>
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
-    <connection id="c94937e9-44d4-424d-9871-6f3e6d4861af">
-      <console name="chat" type="STANDARD" schema="chat" session="Main"><![CDATA[select pass_usr from users where login_usr = 'Kir']]></console>
+    <connection id="c269d55e-468d-4620-8123-68878dfd838b">
+      <console name="chat" type="STANDARD" schema="main" session="Main">select * from users</console>
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
     <open-files />
   </component>
   <component name="DBNavigator.Project.DatabaseSessionManager">
-    <connection id="c94937e9-44d4-424d-9871-6f3e6d4861af" />
+    <connection id="c269d55e-468d-4620-8123-68878dfd838b" />
   </component>
   <component name="DBNavigator.Project.EditorStateManager">
     <last-used-providers />
@@ -55,27 +59,32 @@
     <filters />
   </component>
   <component name="DBNavigator.Project.ScriptExecutionManager" clear-outputs="true">
-    <recently-used-interfaces />
+    <recently-used-interfaces>
+      <mapping database-type="SQLITE" interface-id="DEFAULT" />
+    </recently-used-interfaces>
   </component>
   <component name="DBNavigator.Project.Settings">
     <connections>
-      <connection id="c94937e9-44d4-424d-9871-6f3e6d4861af" active="true">
+      <connection id="c269d55e-468d-4620-8123-68878dfd838b" active="true">
         <database>
           <name value="chat" />
           <description value="" />
-          <database-type value="MYSQL" />
+          <database-type value="SQLITE" />
           <config-type value="BASIC" />
-          <database-version value="8.0" />
+          <database-version value="3.21" />
           <driver-source value="BUILTIN" />
           <driver-library value="" />
           <driver value="" />
-          <url-type value="DATABASE" />
+          <url-type value="FILE" />
           <host value="localhost" />
-          <port value="3306" />
-          <database value="chat" />
-          <type value="USER_PASSWORD" />
-          <user value="root" />
-          <deprecated-pwd value="MTIzNDU2Nzg=" />
+          <port value="1234" />
+          <database value="database" />
+          <files>
+            <file path="$PROJECT_DIR$/server-chat/starkchat.db" schema="main" />
+          </files>
+          <type value="NONE" />
+          <user value="" />
+          <deprecated-pwd value="" />
         </database>
         <properties>
           <auto-commit value="false" />
@@ -101,7 +110,7 @@
           <session-management value="true" />
           <ddl-file-binding value="true" />
           <database-logging value="false" />
-          <connect-automatically value="true" />
+          <connect-automatically value="false" />
           <restore-workspace value="true" />
           <restore-workspace-deep value="true" />
           <environment-type value="default" />
