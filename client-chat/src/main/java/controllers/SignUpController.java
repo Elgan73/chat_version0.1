@@ -8,6 +8,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -39,6 +41,7 @@ public class SignUpController implements Initializable {
         Parent root = loader.getRoot();
         Stage stage = new Stage();
         stage.setScene(new Scene(root));
+        stage.initStyle(StageStyle.UNDECORATED);
         stage.showAndWait();
     }
 
@@ -95,5 +98,11 @@ public class SignUpController implements Initializable {
         out.close();
         Platform.exit();
         System.exit(0);
+    }
+
+    public void enterChat(KeyEvent keyEvent) {
+        if (keyEvent.getCode().equals(KeyCode.ENTER)) {
+            sendRequest();
+        }
     }
 }
