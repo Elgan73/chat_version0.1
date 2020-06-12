@@ -1,0 +1,17 @@
+<component name="ArtifactManager">
+  <artifact name="chat:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/chat_jar</output-path>
+    <root id="root">
+      <element id="archive" name="chat.jar">
+        <element id="module-output" name="chat" />
+        <element id="module-output" name="server-chat" />
+        <element id="module-output" name="client-chat" />
+      </element>
+      <element id="library" level="project" name="Maven: org.xerial:sqlite-jdbc:3.21.0" />
+      <element id="library" level="project" name="Maven: org.apache.logging.log4j:log4j-core:2.13.0" />
+      <element id="library" level="project" name="Maven: log4j:log4j:1.2.17" />
+      <element id="library" level="project" name="Maven: org.apache.logging.log4j:log4j-api:2.13.0" />
+      <element id="library" level="project" name="lib" />
+    </root>
+  </artifact>
+</component>

@@ -11,6 +11,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import net.Network;
 
+import javax.naming.Context;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -25,6 +26,7 @@ public class SignUpController implements Initializable {
     public TextField userSignUpPass;
     private DataOutputStream out;
     private DataInputStream in;
+    private Context context;
     private static final Network net = Network.getInstance();
 
     private void openChatWindow() {

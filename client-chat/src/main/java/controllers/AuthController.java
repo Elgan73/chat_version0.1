@@ -87,11 +87,12 @@ public class AuthController implements Initializable {
                     System.out.println(msg);
                     if (msg.startsWith("/authOk")) {
                         Platform.runLater(this::openChatWindow);
-                        Platform.runLater(() -> {
-                            enterChat.getScene().getWindow().hide();
-                        });
+                        Platform.runLater(() -> enterChat.getScene().getWindow().hide());
                         break;
                     }
+//                    if(msg.equals("/authError")) {
+//                        Platform.runLater(() -> );
+//                    }
 //                    else {
 //                        System.out.println("smth wrong with authority!");
 //                    }
