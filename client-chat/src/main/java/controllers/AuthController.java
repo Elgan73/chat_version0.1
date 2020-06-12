@@ -8,8 +8,10 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import net.Network;
 
@@ -23,24 +25,10 @@ public class AuthController implements Initializable {
     public Button enterChat;
     public TextField userLogin;
     public TextField userPassword;
-    public Button registration;
     private static final Network net = Network.getInstance();
+    public ImageView closeWindow;
     private DataInputStream in;
     private DataOutputStream out;
-
-    private void openRegistrationWindow() {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/signUp.fxml"));
-        try {
-            loader.load();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Parent root = loader.getRoot();
-        Stage stage = new Stage();
-        stage.setScene(new Scene(root));
-        stage.showAndWait();
-    }
 
     private void openChatWindow() {
         FXMLLoader loader = new FXMLLoader();
@@ -53,6 +41,7 @@ public class AuthController implements Initializable {
         Parent root = loader.getRoot();
         Stage stage = new Stage();
         stage.setScene(new Scene(root));
+
         stage.showAndWait();
     }
 
@@ -75,7 +64,7 @@ public class AuthController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-//        net.connect("localhost", 8189);
+        net.connect("localhost", 8189);
         in = net.getInputStream();
         out = net.getOutputStream();
 
@@ -104,9 +93,11 @@ public class AuthController implements Initializable {
         sendRequest();
     }
 
-    public void intentRegistration(ActionEvent actionEvent) {
-        Platform.runLater(this::openRegistrationWindow);
-        registration.getScene().getWindow().hide();
+    public void closeWindow(MouseEvent keyEvent) throws IOException {
+        in.close();
+        out.close();
+        Platform.exit();
+        System.exit(0);
     }
 }
 
