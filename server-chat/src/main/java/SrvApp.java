@@ -62,7 +62,9 @@ public class SrvApp {
                     String[] splitMsg = clientMessage.split(",", 3);
                     if (createUser(splitMsg[1], splitMsg[2])) {
                         System.out.println("Регистрация прошла успешна");
-                        out.writeUTF("/regOk");
+                        String c = "/regOk";
+                        System.out.println(c);
+                        out.writeUTF(c);
                         out.flush();
                         lastConnectedNickName = splitMsg[1];
                         break;
@@ -109,7 +111,6 @@ public class SrvApp {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-        String user = null;
         try (Connection connection = DriverManager.getConnection("jdbc:sqlite:/Users/devapps4selling/IdeaProjects/chat/server-chat/starkchat.db")) {
             PreparedStatement createUserRequest = connection.prepareStatement("insert into users (login_usr, pass_usr) values (?, ?);");
             createUserRequest.setString(1, login);

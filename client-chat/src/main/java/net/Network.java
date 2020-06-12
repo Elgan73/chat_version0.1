@@ -6,24 +6,25 @@ import java.io.IOException;
 import java.net.Socket;
 
 public class Network {
-    private static Network INSTANCE = new Network();
+    private static Network instance = new Network();
     private DataOutputStream outputStream;
     private DataInputStream inputStream;
     private String ipAddress;
     private Socket clientSocket;
     private int port;
 
-    private Network() {}
+    private Network() {
+    }
 
 
     public boolean connect(String ipAddress, int port) {
-        try{
+        try {
             Socket clientSocket = new Socket(ipAddress, port);
-            INSTANCE.setInputStream(new DataInputStream(clientSocket.getInputStream()));
-            INSTANCE.setOutputStream(new DataOutputStream(clientSocket.getOutputStream()));
-            INSTANCE.setClientSocket(clientSocket);
-            INSTANCE.setIpAddress(ipAddress);
-            INSTANCE.setPort(port);
+            instance.setInputStream(new DataInputStream(clientSocket.getInputStream()));
+            instance.setOutputStream(new DataOutputStream(clientSocket.getOutputStream()));
+            instance.setClientSocket(clientSocket);
+            instance.setIpAddress(ipAddress);
+            instance.setPort(port);
 
             return true;
         } catch (IOException e) {
@@ -84,7 +85,7 @@ public class Network {
 
 
     public static Network getInstance() {
-        return INSTANCE;
+        return instance;
     }
 
     @Override

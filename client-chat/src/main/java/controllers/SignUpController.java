@@ -8,7 +8,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import net.Network;
 
 import java.io.DataInputStream;
@@ -52,9 +54,10 @@ public class SignUpController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         net.connect("localhost", 8189);
+
         in = net.getInputStream();
         out = net.getOutputStream();
-
+        System.out.println(net.toString());
         Thread tr = new Thread(() -> {
             String msg;
             while (true) {
@@ -68,21 +71,11 @@ public class SignUpController implements Initializable {
                             signUpBtn.getScene().getWindow().hide();
                         });
                         break;
-                    } else {
-                        System.out.println("Something wrong =(");
-//                    Stage stage = new Stage();
-//                    Parent root = FXMLLoader.load(
-//                            YourClassController.class.getResource("YourClass.fxml"));
-//                    stage.setScene(new Scene(root));
-//                    stage.setTitle("My modal window");
-//                    stage.initModality(Modality.WINDOW_MODAL);
-//                    stage.initOwner(
-//                            ((Node)event.getSource()).getScene().getWindow() );
-//                    stage.show();
                     }
 
                 } catch (IOException e) {
                     e.printStackTrace();
+                    break;
                 }
             }
 
@@ -95,5 +88,12 @@ public class SignUpController implements Initializable {
 
     public void clickSignUpBtn(ActionEvent actionEvent) {
         sendRequest();
+    }
+
+    public void closeWindow(MouseEvent keyEvent) throws IOException {
+        in.close();
+        out.close();
+        Platform.exit();
+        System.exit(0);
     }
 }
