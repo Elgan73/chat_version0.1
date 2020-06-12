@@ -19,17 +19,11 @@ public class ClientHandler implements Runnable {
         in = new DataInputStream(socket.getInputStream());
         out = new DataOutputStream(socket.getOutputStream());
         running = true;
-
         welcome();
-
     }
 
     public String getNickName() {
         return nickName;
-    }
-
-    public void setNickName(String nickName) {
-        this.nickName = nickName;
     }
 
     public void welcome() throws IOException {
@@ -56,8 +50,6 @@ public class ClientHandler implements Runnable {
         }
     }
 
-
-
     public void sendPrivateMsg(String name, String msg) throws IOException {
         for (ClientHandler cl : SrvApp.getClients()) {
             if (name.equals(cl.getNickName())) {
@@ -74,13 +66,11 @@ public class ClientHandler implements Runnable {
     public synchronized void changeNickName(String msg) throws IOException {
         String oldNick = getNickName();
         String newNick = msg.substring(3);
-
         if (srvApp.changeNickName(oldNick, newNick)) {
             broadCastMessage(oldNick + " has changed nickname to " + nickName + "\n");
         } else {
-            sendMessage("Вы не можете выбрать это Ник, он уже занят");
+            sendMessage("Вы не можете выбрать этот Ник, он уже занят");
         }
-
     }
 
     public synchronized void exitChat() throws Exception {
@@ -88,7 +78,6 @@ public class ClientHandler implements Runnable {
         deleteClient();
         this.downService();
     }
-
 
     public synchronized void downService() {
         try {
@@ -105,7 +94,6 @@ public class ClientHandler implements Runnable {
     public void run() {
         while (running) {
             try {
-
                 if (socket.isConnected()) {
                     String clientMessage = in.readUTF();
                     if (!clientMessage.isEmpty()) {
@@ -129,7 +117,6 @@ public class ClientHandler implements Runnable {
                 }
             } catch (Exception ex) {
                 System.out.println("Потеряна связь с клиентом: " + this.nickName);
-
                 try {
                     socket.close();
                     in.close();
