@@ -84,7 +84,7 @@ public class SrvApp {
             e.printStackTrace();
         }
         String passwordFromDB = null;
-        try (Connection connection = DriverManager.getConnection("jdbc:sqlite:/Users/devapps4selling/IdeaProjects/chat/server-chat/starkchat.db")) {
+        try (Connection connection = DriverManager.getConnection("jdbc:sqlite:server-chat/starkchat.db")) {
             PreparedStatement passwordRequest = connection.prepareStatement("select pass_usr from users where login_usr = ?;");
             passwordRequest.setString(1, login);
             ResultSet resultSet = passwordRequest.executeQuery();
@@ -105,7 +105,7 @@ public class SrvApp {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-        try (Connection connection = DriverManager.getConnection("jdbc:sqlite:/Users/devapps4selling/IdeaProjects/chat/server-chat/starkchat.db")) {
+        try (Connection connection = DriverManager.getConnection("jdbc:sqlite:server-chat/starkchat.db")) {
             PreparedStatement createUserRequest = connection.prepareStatement("insert into users (login_usr, pass_usr) values (?, ?);");
             createUserRequest.setString(1, login);
             createUserRequest.setString(2, pass);
@@ -128,7 +128,7 @@ public class SrvApp {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-        try (Connection connection = DriverManager.getConnection("jdbc:sqlite:/Users/devapps4selling/IdeaProjects/chat/server-chat/starkchat.db")) {
+        try (Connection connection = DriverManager.getConnection("jdbc:sqlite:server-chat/starkchat.db")) {
             String query = "select login_usr from users where login_usr = '" + login + "'";
             Statement st = connection.createStatement();
             ResultSet resultSet = st.executeQuery(query);
@@ -150,7 +150,7 @@ public class SrvApp {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-        try (Connection connection = DriverManager.getConnection("jdbc:sqlite:/Users/devapps4selling/IdeaProjects/chat/server-chat/starkchat.db")) {
+        try (Connection connection = DriverManager.getConnection("jdbc:sqlite:server-chat/starkchat.db")) {
             String changeNickName = "UPDATE users SET login_usr = '" + newName + "' WHERE login_usr = '" + name + "'";
             Statement st = connection.createStatement();
             if (!clientAlreadyExist(newName)) {
