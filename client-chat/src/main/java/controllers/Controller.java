@@ -170,7 +170,7 @@ public class Controller implements Initializable {
     }
 
     private void readHistoryFromFile() {
-        history = new File("/Users/devapps4selling/IdeaProjects/chat/client-chat/src/main/java/history/history.txt");
+        history = new File("client-chat/src/main/java/history/history.txt");
         try {
             history.createNewFile();
             BufferedReader readHistoryFromFile = new BufferedReader(new FileReader(history));
