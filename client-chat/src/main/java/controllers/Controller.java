@@ -19,20 +19,18 @@ import java.util.Date;
 import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
-    //    ObservableList<String> clients = FXCollections.observableArrayList();
     public ListView<String> listView;
     public TextField inputText;
     public TextField nickName;
     public Button exitChat;
     public ListView<String> chatMsg;
     private DataInputStream in;
-    public TextFlow textFlow;
     private DataOutputStream out;
     private static final Network net = Network.getInstance();
     private File history;
     private String myNickName;
 
-    public void send(MouseEvent actionEvent) throws IOException {
+    public void send(MouseEvent actionEvent) {
         sendMessage();
     }
 
@@ -207,7 +205,7 @@ public class Controller implements Initializable {
         });
     }
 
-    public void sendEnter(KeyEvent keyEvent) throws IOException {
+    public void sendEnter(KeyEvent keyEvent) {
         if (keyEvent.getCode().equals(KeyCode.ENTER)) {
             sendMessage();
         }
@@ -230,6 +228,13 @@ public class Controller implements Initializable {
                 System.out.println("DO SMTH ON EXIT");
                 System.exit(1);
             };
+
+
+    public void clearField(MouseEvent mouseEvent) {
+        if(nickName.getText() != null) {
+            nickName.clear();
+        }
+    }
 }
 
 
