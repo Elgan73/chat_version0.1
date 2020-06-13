@@ -3,6 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="460.0" prefWidth="600.0" style="-fx-background-color: #2C2C45;" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.Controller">
 
@@ -10,11 +11,15 @@
         <ListView fx:id="listView" layoutY="1.0" prefHeight="414.0" prefWidth="171.0" style="-fx-background-color: #2C2C45; -fx-border-radius: 3; -fx-border-color: #CFCED0;" stylesheets="@listViewStyleCell.css" />
         <Button fx:id="exitChat" layoutY="418.0" mnemonicParsing="false" onAction="#exitChat" prefHeight="35.0" prefWidth="171.0" style="-fx-background-color: #43426B; -fx-border-color: #CFCED0; -fx-border-radius: 3;" text="Exit" textAlignment="CENTER" textFill="WHITE" />
     </Pane>
-    <TextField fx:id="nickName" layoutX="177.0" layoutY="421.0" prefHeight="35.0" prefWidth="79.0" style="-fx-background-color: #43426B; -fx-border-color: #CFCED0; -fx-border-radius: 3;" stylesheets="@inputAreaStyleText.css" />
     <TextField fx:id="inputText" layoutX="258.0" layoutY="421.0" onKeyReleased="#sendEnter" prefHeight="35.0" prefWidth="300.0" promptText="Type your message..." style="-fx-background-color: #43426B; -fx-border-color: #CFCED0; -fx-border-radius: 3;" stylesheets="@inputAreaStyleText.css" />
     <ListView fx:id="chatMsg" layoutX="177.0" layoutY="4.0" prefHeight="414.0" prefWidth="420.0" style="-fx-background-color: #2C2C45; -fx-border-color: #CFCED0; -fx-border-radius: 3;" stylesheets="@listViewStyleCell.css" />
 
     <ImageView fitHeight="35.0" fitWidth="31.0" layoutX="563.0" layoutY="423.0" onMouseClicked="#send" pickOnBounds="true" preserveRatio="true">
         <Image url="@arrow.png" />
     </ImageView>
+     <TextField fx:id="nickName" editable="false" layoutX="177.0" layoutY="421.0" onMouseClicked="#clearField" prefHeight="35.0" prefWidth="79.0" promptText="Private" style="-fx-background-color: #43426B; -fx-border-color: #CFCED0; -fx-border-radius: 3;" stylesheets="@inputAreaStyleText.css">
+      <font>
+         <Font name="Futura Medium" size="15.0" />
+      </font>
+   </TextField>
 </AnchorPane>
