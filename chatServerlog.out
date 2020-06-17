@@ -1,0 +1,15 @@
+22:43:54 [INFO ] <SrvApp:<init>:27> - SERVER: started
+22:44:05 [INFO ] <SrvApp:auth:63> - CLIENT: 1 is authorized
+22:44:05 [INFO ] <SrvApp:<init>:36> - CLIENT: 1 accepted
+22:44:06 [INFO ] <SrvApp:run:112> - CLIENT: 1 exit from chat
+22:45:52 [INFO ] <SrvApp:<init>:27> - SERVER: started
+22:45:59 [ERROR] <SrvApp:isUserDataConfirmed:105> - CLIENT DB: not found login in DB
+22:45:59 [ERROR] <SrvApp:auth:69> - CLIENT AUTH: Авторизация отклонена
+22:48:02 [ERROR] <SrvApp:<init>:42> - Неудачная попытка авторизации
+java.io.EOFException
+	at java.base/java.io.DataInputStream.readUnsignedShort(DataInputStream.java:345)
+	at java.base/java.io.DataInputStream.readUTF(DataInputStream.java:594)
+	at java.base/java.io.DataInputStream.readUTF(DataInputStream.java:569)
+	at SrvApp.auth(SrvApp.java:52)
+	at SrvApp.<init>(SrvApp.java:32)
+	at SrvApp.main(SrvApp.java:185)

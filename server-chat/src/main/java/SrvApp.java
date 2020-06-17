@@ -1,3 +1,5 @@
+import org.apache.log4j.Logger;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -10,6 +12,7 @@ public class SrvApp {
 
     private final static int PORT = 8189;
     private String lastConnectedNickName;
+    private final static Logger log = Logger.getLogger(SrvApp.class);
 
     private static ConcurrentLinkedDeque<ClientHandler> clients;
 
@@ -21,18 +24,23 @@ public class SrvApp {
         clients = new ConcurrentLinkedDeque<>();
         try (ServerSocket srv = new ServerSocket(port)) {
             System.out.println("Server started!");
+            log.info("SERVER: started");
             while (true) {
+
                 Socket socket = srv.accept();
 
                 if (auth(socket)) {
+
                     ClientHandler client = new ClientHandler(socket, lastConnectedNickName);
                     clients.add(client);
+                    log.info("CLIENT: " + client.getNickName() + " accepted");
                     System.out.println(client.getNickName() + " accepted!");
                     new Thread(client).start();
                 }
             }
         } catch (Exception e) {
-            System.out.println("Неудачная попытка авторизации.");
+            log.error("Неудачная попытка авторизации", e);
+            System.out.println("Неудачная попытка авторизации");
         }
     }
 
@@ -52,24 +60,26 @@ public class SrvApp {
                         out.writeUTF("/authOk");
                         out.flush();
                         lastConnectedNickName = splitClientMessage[1];
+                        log.info("CLIENT: " + lastConnectedNickName + " is authorized");
                         break;
                     } else {
                         out.writeUTF("/authorizationError");
                         out.flush();
                         System.out.println("Авторизация отклонена");
+                        log.error("CLIENT AUTH: Авторизация отклонена");
                     }
                 } else if (clientMessage.startsWith("/regUser")) {
                     String[] splitMsg = clientMessage.split(",", 3);
                     if (createUser(splitMsg[1], splitMsg[2])) {
                         System.out.println("Регистрация прошла успешна");
-                        String c = "/regOk";
-                        System.out.println(c);
-                        out.writeUTF(c);
+                        out.writeUTF("/regOk");
                         out.flush();
                         lastConnectedNickName = splitMsg[1];
+                        log.info("CLIENT: ");
                         break;
                     } else {
-                        System.out.println("Такой юзверь уже есть");
+                        System.out.println("Такой юзверь уже есть либо ошибка при регистрации");
+                        log.error("CLIENT REG: Такой клиент уже зарегестрирован");
                     }
                 }
             }
@@ -82,6 +92,7 @@ public class SrvApp {
             Class.forName("org.sqlite.JDBC");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
+            log.fatal("DB: not resolve Class.forName" + e);
         }
         String passwordFromDB = null;
         try (Connection connection = DriverManager.getConnection("jdbc:sqlite:server-chat/starkchat.db")) {
@@ -91,6 +102,7 @@ public class SrvApp {
             passwordFromDB = resultSet.getString("pass_usr");
         } catch (SQLException throwable) {
             System.out.println("А юзверя-то и нет =(");
+            log.error("CLIENT DB: not found login in DB");
         }
         if (passwordFromDB != null) {
             return passwordFromDB.equals(password);
@@ -104,6 +116,7 @@ public class SrvApp {
             Class.forName("org.sqlite.JDBC");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
+            log.fatal("DB: not resolve Class.forName" + e);
         }
         try (Connection connection = DriverManager.getConnection("jdbc:sqlite:server-chat/starkchat.db")) {
             PreparedStatement createUserRequest = connection.prepareStatement("insert into users (login_usr, pass_usr) values (?, ?);");
@@ -112,11 +125,13 @@ public class SrvApp {
             createUserRequest.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+            log.error("CLIENT DB CREATE: SQL error " + e);
         }
         if (isUserDataConfirmed(login, pass)) {
             return true;
         } else {
             System.out.println("Проблема при записи в базу");
+            log.error("CLIENT DB CREATE: Already registered or SQL error");
             return false;
         }
 
@@ -127,6 +142,7 @@ public class SrvApp {
             Class.forName("org.sqlite.JDBC");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
+            log.fatal("DB: not resolve Class.forName" + e);
         }
         try (Connection connection = DriverManager.getConnection("jdbc:sqlite:server-chat/starkchat.db")) {
             String query = "select login_usr from users where login_usr = '" + login + "'";
@@ -140,6 +156,7 @@ public class SrvApp {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            log.error("CLIENT DB: problem with SQL link " + e);
         }
         return false;
     }
@@ -149,6 +166,7 @@ public class SrvApp {
             Class.forName("org.sqlite.JDBC");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
+            log.fatal("DB: not resolve Class.forName" + e);
         }
         try (Connection connection = DriverManager.getConnection("jdbc:sqlite:server-chat/starkchat.db")) {
             String changeNickName = "UPDATE users SET login_usr = '" + newName + "' WHERE login_usr = '" + name + "'";
@@ -161,6 +179,7 @@ public class SrvApp {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            log.error("CLIENT DB: problem with SQL link " + e);
         }
         return false;
     }

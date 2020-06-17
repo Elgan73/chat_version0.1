@@ -1,3 +1,5 @@
+import org.apache.log4j.Logger;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -11,6 +13,7 @@ public class ClientHandler implements Runnable {
     private String nickName;
     private boolean running;
     private SrvApp srvApp;
+    private final static Logger log = Logger.getLogger(SrvApp.class);
 
 
     public ClientHandler(Socket socket, String nickName) throws IOException {
@@ -39,6 +42,7 @@ public class ClientHandler implements Runnable {
         SrvApp.getClients().remove(this);
         for (ClientHandler cl : SrvApp.getClients()) {
             cl.sendMessage("/deleteClient " + this.nickName);
+            log.info("CLIENT: remove " + this.nickName);
         }
     }
 
@@ -80,12 +84,16 @@ public class ClientHandler implements Runnable {
     }
 
     public synchronized void downService() {
+
         try {
             if (!socket.isClosed()) {
+
                 socket.close();
                 in.close();
                 out.close();
+
             }
+
         } catch (IOException ignored) {
         }
     }
@@ -101,6 +109,7 @@ public class ClientHandler implements Runnable {
                             System.out.println(getNickName() + ": exit from chat");
                             sendMessage(clientMessage);
                             exitChat();
+                            log.info("CLIENT: " + getNickName() + " exit from chat");
                             break;
                         } else if (clientMessage.startsWith("/n")) {
                             changeNickName(clientMessage);
@@ -117,17 +126,20 @@ public class ClientHandler implements Runnable {
                 }
             } catch (Exception ex) {
                 System.out.println("Потеряна связь с клиентом: " + this.nickName);
+                log.error("CLIENT: lost connect with " + this.nickName);
                 try {
                     socket.close();
                     in.close();
                     out.close();
                     deleteClient();
+
                 } catch (IOException e) {
                     e.printStackTrace();
                     break;
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+                log.info("SERVER: Server is stopped");
                 break;
             }
         }
