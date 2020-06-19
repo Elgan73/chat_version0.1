@@ -54,3 +54,13 @@ java.io.EOFException
 22:55:59 [INFO ] <SrvApp:<init>:27> - SERVER: started
 22:56:12 [INFO ] <SrvApp:auth:63> - CLIENT: Kir is authorized
 22:56:12 [INFO ] <SrvApp:<init>:36> - CLIENT: Kir accepted
+01:29:32 [INFO ] <SrvApp:<init>:27> - SERVER: started
+01:30:42 [INFO ] <SrvApp:auth:63> - CLIENT: Kir is authorized
+01:30:42 [INFO ] <SrvApp:<init>:36> - CLIENT: Kir accepted
+01:30:51 [INFO ] <SrvApp:run:112> - CLIENT: Kir exit from chat
+01:32:06 [INFO ] <SrvApp:auth:63> - CLIENT: Kir is authorized
+01:32:06 [INFO ] <SrvApp:<init>:36> - CLIENT: Kir accepted
+01:33:18 [INFO ] <SrvApp:run:112> - CLIENT: Kir exit from chat
+01:33:33 [INFO ] <SrvApp:auth:63> - CLIENT: Kir is authorized
+01:33:33 [INFO ] <SrvApp:<init>:36> - CLIENT: Kir accepted
+01:33:40 [INFO ] <SrvApp:run:112> - CLIENT: Kir exit from chat
