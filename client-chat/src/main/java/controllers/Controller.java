@@ -86,30 +86,30 @@ public class Controller implements Initializable {
                         Platform.runLater(() -> listView.getItems().remove(finalMessage1.substring(14)));
                     }
                 } else {
-                    String[] msgFromSrv = message.split(" ", 2);
+                    String msgFromSrv = message;
                     Date date = new Date();
                     SimpleDateFormat formatOfDate = new SimpleDateFormat("HH:mm");
                     String timeDate = formatOfDate.format(date);
-                    listView.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
-                        @Override
-                        public ListCell<String> call(ListView<String> stringListView) {
-                            return new ListCell<>() {
-                                @Override
-                                protected void updateItem(String item, boolean empty) {
-                                    super.updateItem(item, empty);
-                                    if (empty || item == null) {
-                                        return;
-                                    }
-                                    Label nick = new Label(msgFromSrv[0]);
-                                    Label timeMsg = new Label(timeDate + " " + msgFromSrv[1]);
-                                    VBox vBox = new VBox(nick, timeMsg);
-                                    vBox.setAlignment(Pos.CENTER_LEFT);
-                                    setGraphic(vBox);
-                                }
-                            };
-                        }
-                    });
-//                    Platform.runLater(() -> chatMsg.getItems().addAll(timeDate + " " + msgFromSrv));
+//                    listView.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
+//                        @Override
+//                        public ListCell<String> call(ListView<String> stringListView) {
+//                            return new ListCell<>() {
+//                                @Override
+//                                protected void updateItem(String item, boolean empty) {
+//                                    super.updateItem(item, empty);
+//                                    if (empty || item == null) {
+//                                        return;
+//                                    }
+//                                    Label nick = new Label(msgFromSrv[0]);
+//                                    Label timeMsg = new Label(timeDate + " " + msgFromSrv[1]);
+//                                    VBox vBox = new VBox(nick, timeMsg);
+//                                    vBox.setAlignment(Pos.CENTER_LEFT);
+//                                    setGraphic(vBox);
+//                                }
+//                            };
+//                        }
+//                    });
+                    Platform.runLater(() -> chatMsg.getItems().addAll(timeDate + " " + msgFromSrv));
                     writeMessageToFile(history, message);
                 }
 
@@ -158,26 +158,26 @@ public class Controller implements Initializable {
             ////                        }
             ////                    });
 
-            listView.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
-                @Override
-                public ListCell<String> call(ListView<String> stringListView) {
-                    return new ListCell<>() {
-                        @Override
-                        protected void updateItem(String item, boolean empty) {
-                            super.updateItem(item, empty);
-                            if (empty || item == null) {
-                                return;
-                            }
-                            Label nick = new Label(myNickName);
-                            Label timeMsg = new Label(b);
-                            VBox vBox = new VBox(nick, timeMsg);
-                            vBox.setAlignment(Pos.CENTER_RIGHT);
-                            setGraphic(vBox);
-                        }
-                    };
-                }
-            });
-//            chatMsg.getItems().addAll(finalMessage);
+//            listView.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
+//                @Override
+//                public ListCell<String> call(ListView<String> stringListView) {
+//                    return new ListCell<>() {
+//                        @Override
+//                        protected void updateItem(String item, boolean empty) {
+//                            super.updateItem(item, empty);
+//                            if (empty || item == null) {
+//                                return;
+//                            }
+//                            Label nick = new Label(myNickName);
+//                            Label timeMsg = new Label(b);
+//                            VBox vBox = new VBox(nick, timeMsg);
+//                            vBox.setAlignment(Pos.CENTER_RIGHT);
+//                            setGraphic(vBox);
+//                        }
+//                    };
+//                }
+//            });
+            chatMsg.getItems().addAll(finalMessage);
             writeMessageToFile(history, finalMessage);
         }
 
