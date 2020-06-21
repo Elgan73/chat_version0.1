@@ -90,25 +90,6 @@ public class Controller implements Initializable {
                     Date date = new Date();
                     SimpleDateFormat formatOfDate = new SimpleDateFormat("HH:mm");
                     String timeDate = formatOfDate.format(date);
-//                    listView.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
-//                        @Override
-//                        public ListCell<String> call(ListView<String> stringListView) {
-//                            return new ListCell<>() {
-//                                @Override
-//                                protected void updateItem(String item, boolean empty) {
-//                                    super.updateItem(item, empty);
-//                                    if (empty || item == null) {
-//                                        return;
-//                                    }
-//                                    Label nick = new Label(msgFromSrv[0]);
-//                                    Label timeMsg = new Label(timeDate + " " + msgFromSrv[1]);
-//                                    VBox vBox = new VBox(nick, timeMsg);
-//                                    vBox.setAlignment(Pos.CENTER_LEFT);
-//                                    setGraphic(vBox);
-//                                }
-//                            };
-//                        }
-//                    });
                     Platform.runLater(() -> chatMsg.getItems().addAll(timeDate + " " + msgFromSrv));
                     writeMessageToFile(history, message);
                 }
@@ -134,49 +115,6 @@ public class Controller implements Initializable {
             String timeDate = formatOfDate.format(date);
             String finalMessage = timeDate + " " + myNickName + " : " + inputText.getText();
             String b = timeDate + " " + inputText.getText();
-            //listView.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
-            ////                        @Override
-            ////                        public ListCell<String> call(ListView<String> stringListView) {
-            ////                            return new ListCell<>() {
-            ////                                @Override
-            ////                                protected void updateItem(String item, boolean empty) {
-            ////                                    super.updateItem(item, empty);
-            ////                                    if(empty || item == null) {
-            ////                                        return;
-            ////                                    }
-            ////                                    Date date = new Date();
-            ////                                    SimpleDateFormat formatOfDate = new SimpleDateFormat("HH:mm");
-            ////                                    String time = formatOfDate.format(date);
-            ////                                    Label nick = new Label(myNickName);
-            ////                                    Label tm = new Label(time);
-            ////                                    Label clientMsg = new Label(msgFromSrv);
-            ////                                    HBox hBox = new HBox(tm, clientMsg);
-            ////                                    VBox vBox = new VBox(nick, hBox);
-            ////                                    setGraphic(vBox);
-            ////                                }
-            ////                            };
-            ////                        }
-            ////                    });
-
-//            listView.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
-//                @Override
-//                public ListCell<String> call(ListView<String> stringListView) {
-//                    return new ListCell<>() {
-//                        @Override
-//                        protected void updateItem(String item, boolean empty) {
-//                            super.updateItem(item, empty);
-//                            if (empty || item == null) {
-//                                return;
-//                            }
-//                            Label nick = new Label(myNickName);
-//                            Label timeMsg = new Label(b);
-//                            VBox vBox = new VBox(nick, timeMsg);
-//                            vBox.setAlignment(Pos.CENTER_RIGHT);
-//                            setGraphic(vBox);
-//                        }
-//                    };
-//                }
-//            });
             chatMsg.getItems().addAll(finalMessage);
             writeMessageToFile(history, finalMessage);
         }
